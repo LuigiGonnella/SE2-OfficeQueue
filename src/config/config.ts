@@ -3,10 +3,9 @@ import path from "node:path";
 
 const APP_V1_BASE_URL = "/api/v1";
 const URL_AUTH = "/auth";
-const URL_USERS = "/users";
-const URL_NETWORKS = "/networks";
-const URL_GATEWAYS = "/:networkCode/gateways";
-const URL_SENSORS = "/:gatewayMac/sensors";
+const URL_CUSOTMERS = "/customers";
+const URL_SERVICES = "/services";
+const URL_TICKETS = "/tickets";
 
 export const CONFIG = {
 	APP_PORT: process.env.PORT || 5000,
@@ -15,10 +14,9 @@ export const CONFIG = {
 	ROUTES: {
 		V1_SWAGGER: `${APP_V1_BASE_URL}/doc`,
 		V1_AUTH: APP_V1_BASE_URL + URL_AUTH,
-		V1_USERS: APP_V1_BASE_URL + URL_USERS,
-		V1_NETWORKS: APP_V1_BASE_URL + URL_NETWORKS,
-		V1_GATEWAYS: APP_V1_BASE_URL + URL_NETWORKS + URL_GATEWAYS,
-		V1_SENSORS: APP_V1_BASE_URL + URL_NETWORKS + URL_GATEWAYS + URL_SENSORS,
+		V1_CUSOTMERS: APP_V1_BASE_URL + URL_CUSOTMERS,
+		V1_SERVICES: APP_V1_BASE_URL + URL_SERVICES,
+		V1_TICKETS: APP_V1_BASE_URL + URL_TICKETS
 	},
 	LOG_LEVEL: process.env.LOG_LEVEL || "info",
 	LOG_PATH: process.env.LOG_PATH || "logs",
