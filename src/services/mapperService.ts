@@ -12,7 +12,7 @@ export function createErrorDTO(
   }) as ErrorDTO;
 }
 
-function removeNullAttributes<T>(dto: T): Partial<T> {
+function removeNullAttributes<T extends object>(dto: T): Partial<T> {
   return Object.fromEntries(
     Object.entries(dto).filter(
       ([_, value]) =>

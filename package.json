@@ -7,9 +7,10 @@
     "doc": "doc"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "build": "tsc",
-    "dev": "ts-node-dev --respawn src/index.ts"
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "nodemon -r tsconfig-paths/register --exec ts-node src/index.ts",
+    "debug-unix": "nodemon -r tsconfig-paths/register --exec 'node --inspect-brk -r ts-node/register' ./src/index.ts",
+    "debug-win": "nodemon -r tsconfig-paths/register --exec \"node --inspect-brk -r ts-node/register\" ./src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "express-openapi-validator": "^5.6.0",
     "js-yaml": "^4.1.0",
     "swagger-ui-express": "^5.0.1",
+    "tsconfig-paths": "^4.2.0",
     "winston": "^3.18.3",
     "yamljs": "^0.3.0"
   },

@@ -3,9 +3,11 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import { CONFIG } from "@config";
 import { errorHandler } from "@middlewares/errorMiddleware";
-import authenticationRouter from "@routes/authenticationRoutes";
 import cors from "cors";
 import * as OpenApiValidator from "express-openapi-validator";
+import customerRouter from "@routes/customerRoutes";
+import ticketRouter from "@routes/ticketRoutes";
+import serviceRouter from "@routes/serviceRoutes";
 
 export const app = express();
 
@@ -27,8 +29,7 @@ app.use(
     })
 )
 
-app.use(CONFIG.ROUTES.V1_AUTH, authenticationRouter);
-app.use(CONFIG.ROUTES.V1_CUSOTMERS, customerRouter);
+app.use(CONFIG.ROUTES.V1_CUSTOMERS, customerRouter);
 app.use(CONFIG.ROUTES.V1_SERVICES, serviceRouter);
 app.use(CONFIG.ROUTES.V1_TICKETS, ticketRouter);
 
