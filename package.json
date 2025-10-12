@@ -7,9 +7,10 @@
     "doc": "doc"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "build": "tsc",
-    "dev": "ts-node-dev --respawn src/index.ts"
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "nodemon -r tsconfig-paths/register --exec ts-node src/index.ts",
+    "debug-unix": "nodemon -r tsconfig-paths/register --exec 'node --inspect-brk -r ts-node/register' ./src/index.ts",
+    "debug-win": "nodemon -r tsconfig-paths/register --exec \"node --inspect-brk -r ts-node/register\" ./src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -23,14 +24,22 @@
   "homepage": "https://github.com/LuigiGonnella/SE2-OfficeQueue#readme",
   "dependencies": {
     "config": "^4.1.1",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
+    "express-openapi-validator": "^5.6.0",
     "js-yaml": "^4.1.0",
     "swagger-ui-express": "^5.0.1",
-    "winston": "^3.18.3"
+    "tsconfig-paths": "^4.2.0",
+    "winston": "^3.18.3",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^24.7.2",
+    "@types/swagger-ui-express": "^4.1.8",
     "@types/winston": "^2.4.4",
+    "@types/yamljs": "^0.2.34",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
