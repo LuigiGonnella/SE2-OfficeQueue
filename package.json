@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "dev": "nodemon -r tsconfig-paths/register --exec ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
+    "build": "tsc",
     "debug-unix": "nodemon -r tsconfig-paths/register --exec 'node --inspect-brk -r ts-node/register' ./src/index.ts",
     "debug-win": "nodemon -r tsconfig-paths/register --exec \"node --inspect-brk -r ts-node/register\" ./src/index.ts"
   },
@@ -28,10 +29,10 @@
     "express": "^5.1.0",
     "express-openapi-validator": "^5.6.0",
     "js-yaml": "^4.1.0",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.1.14",
+    "sqlite3": "^5.1.7",
     "swagger-ui-express": "^5.0.1",
-    "tsconfig-paths": "^4.2.0",
-    "typeorm": "^0.3.x",
+    "typeorm": "^0.3.27",
     "winston": "^3.18.3",
     "yamljs": "^0.3.0"
   },
@@ -42,7 +43,10 @@
     "@types/swagger-ui-express": "^4.1.8",
     "@types/winston": "^2.4.4",
     "@types/yamljs": "^0.2.34",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   }
 }

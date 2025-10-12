@@ -20,6 +20,6 @@ export class CustomerDAO {
         (ticket) => ticket.customer, 
         { cascade: true }
     )
-    tickets: TicketDAO[] = [];
+    tickets: TicketDAO[];
     
 }

@@ -10,7 +10,6 @@ export class TicketDAO {
     @ManyToOne(
         () => CustomerDAO, 
         (customer) => customer.tickets,
-        { cascade: true }
     )
     customer: CustomerDAO;
 

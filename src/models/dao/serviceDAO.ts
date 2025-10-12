@@ -20,7 +20,7 @@ export class ServiceDAO {
     @OneToMany(
         () => TicketDAO,
         (ticket) => ticket.service,
-        { cascade: true }
+        { onDelete: 'CASCADE' }
     )
-    tickets: TicketDAO[] = [];
+    tickets: TicketDAO[];
 }
