@@ -15,8 +15,11 @@ export class CustomerDAO {
     @Column({ nullable: true })
     phoneNumber: string;
 
-    @OneToMany(() => TicketDAO, (ticket) => ticket.customer, { cascade: true })
-    tickets: TicketDAO[];
-
+    @OneToMany(
+        () => TicketDAO, 
+        (ticket) => ticket.customer, 
+        { cascade: true }
+    )
+    tickets: TicketDAO[] = [];
     
 }
