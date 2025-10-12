@@ -13,7 +13,19 @@
     "paths": {
       "@config": ["config/config"],
       "@config/*": ["config/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@models/*": ["models/*"],
+      "@errors/*": ["models/errors/*"],
+      "@dao/*": ["models/dao/*"],
+      "@dto/*": ["models/dto/*"],
+      "@repositories/*": ["repositories/*"],
+      "@routes/*": ["routes/*"],
+      "@controllers/*": ["controllers/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@database": ["database/connection.ts"],
+      "@utils": ["utils.ts"],
+      "@app": ["app.ts"],
+      "@test/*": ["../test/*"]
     }
   },
   "include": ["src/**/*"],
