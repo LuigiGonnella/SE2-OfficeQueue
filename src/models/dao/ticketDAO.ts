@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn} from "typeorm";
+import {Column, Entity, ManyToOne, PrimaryColumn} from "typeorm";
 import {ServiceDAO} from "@models/dao/serviceDAO";
 import {CustomerDAO} from "@models/dao/customerDAO";
 
