@@ -1,5 +1,5 @@
 import {Column, Entity,  OneToMany, PrimaryColumn} from "typeorm";
-import {TicketsDAO} from "@dao/TicketsDAO";
+import { TicketDAO } from "@models/dao/ticketDAO";
 
 @Entity("customers")
 export class CustomerDAO {
