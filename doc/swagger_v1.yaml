@@ -96,6 +96,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ticket'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
 
   /tickets/service/{service_name}:
     get:
@@ -116,7 +122,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Ticket'
-
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+        
 components:
   schemas:
     Customer:

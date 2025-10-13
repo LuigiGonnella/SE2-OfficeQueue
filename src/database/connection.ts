@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
   database: CONFIG.DB_NAME,
   entities: CONFIG.DB_ENTITIES,
   synchronize: true,
-  logging: true,
+  logging: false,
 });
 
 export async function initializeDatabase() {
