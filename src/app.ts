@@ -8,6 +8,7 @@ import * as OpenApiValidator from "express-openapi-validator";
 import customerRouter from "@routes/customerRoutes";
 import ticketRouter from "@routes/ticketRoutes";
 import serviceRouter from "@routes/serviceRoutes";
+import "reflect-metadata";
 
 export const app = express();
 
@@ -22,7 +23,9 @@ app.use(
 
 app.use(
     OpenApiValidator.middleware({
-        apiSpec: './doc/swagger_v1.yaml',
+    // use the same absolute path used by swagger-ui so the validator
+    // can always find the spec regardless of current working directory
+    apiSpec: CONFIG.SWAGGER_V1_FILE_PATH,
         validateApiSpec: true,
         validateRequests: true,
         validateResponses: true,

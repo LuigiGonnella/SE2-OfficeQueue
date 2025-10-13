@@ -2,19 +2,20 @@ import { app } from "@app";
 import { CONFIG } from "@config";
 import { logError, logInfo } from "@services/loggingService";
 import { Server } from "http";
-//import { closeDatabase, initializeDatabase } from "@database";
+import "reflect-metadata";
+import { closeDatabase, initializeDatabase } from "@database";
 
 let server: Server;
  
 async function startServer() {
   try {
-    //await initializeDatabase();
+    await initializeDatabase();
     server = app.listen(CONFIG.APP_PORT, () => {
       logInfo(`Server started on http://localhost:${CONFIG.APP_PORT}`);
       logInfo(
         `Swagger UI available at http://localhost:${CONFIG.APP_PORT}${CONFIG.ROUTES.V1_SWAGGER}`
       );
-      //logInfo(`DB : ${CONFIG.DB_NAME}`);
+      logInfo(`DB : ${CONFIG.DB_NAME}`);
     });
   } catch (error) {
     logError("Error in app initialization:", error);
@@ -36,7 +37,7 @@ async function shutdown() {
   logInfo("Shutting down server...");
 
   await closeServer();
-  //await closeDatabase();
+  await closeDatabase();
 
   logInfo("Shutdown complete.");
   process.exit(0);
