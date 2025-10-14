@@ -46,3 +46,11 @@ function removeNullAttributes<T extends object>(dto: T): Partial<T> {
     )
   ) as Partial<T>;
 }
+
+export function mapTicketDAOToDTO(ticket: any): any {
+  return {
+    ticket_code: ticket.ticket_code,
+    customer_id: ticket.customer_id,
+    id_service: ticket.id_service,
+  };
+}

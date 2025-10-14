@@ -233,7 +233,7 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: number
           example: "TCK-0001"
         service:
           $ref: '#/components/schemas/Service'
