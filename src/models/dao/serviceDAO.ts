@@ -15,6 +15,7 @@ export class ServiceDAO {
     name: string;
 
     @Column({ 
+        type: "text",
         nullable: true,
         default: null,
     })

@@ -7,7 +7,7 @@ import {
     createService,
     deleteService,
 } from "@controllers/serviceController";
-import { get } from "http";
+
 const router = Router();
 
 router.get("/", async (req, res, next) => {

@@ -19,6 +19,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Customer'
+    post:
+      summary: Create a new customer
+      description: Create a new customer with the provided details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
                   
   /services:
     get:
@@ -50,12 +66,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Service'
 
-  /services/{id_service}:
+  /services/id/{id}:
     get:
       summary: Get a specific service by its Id
       parameters:
         - in: path
-          name: id_service
+          name: id
           required: true
           schema:
             type: number
@@ -68,21 +84,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Service'
 
-    delete:
-      summary: Delete a service
-      description: Delete a service by its Id
-      parameters:
-        - in: path
-          name: id_service
-          required: true
-          schema:
-            type: number
-          description: The Id of the service to delete
-      responses:
-        '204':
-          description: Service deleted successfully
-                  
-  /services/{name}:
+  /services/name/{name}:
     get:
       summary: Get a specific service by its name
       parameters:
@@ -99,6 +101,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Service'
+
+    delete:
+      summary: Delete a service
+      description: Delete a service by its name
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The name of the service to delete
+      responses:
+        '204':
+          description: Service deleted successfully
+                  
 
 
   /tickets:
@@ -187,14 +204,16 @@ components:
         id:
           type: integer
           example: 1
-        name:
+        firstName:
           type: string
-          example: "Mario Rossi"
-        email:
+          example: "Mario"
+        lastName:
           type: string
-          format: email
-          example: "mario.rossi@example.com"
-      required: [id, name]
+          example: "Rossi"
+        phoneNumber:
+          type: string
+          example: "391234567890"
+      required: [id, firstName, lastName]
 
     Service:
       type: object

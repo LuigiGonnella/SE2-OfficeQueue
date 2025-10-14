@@ -29,13 +29,19 @@ export interface Customer {
      * @type {string}
      * @memberof Customer
      */
-    name: string;
+    firstName: string;
     /**
      * 
      * @type {string}
      * @memberof Customer
      */
-    email?: string;
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Customer
+     */
+    phoneNumber?: string;
 }
 
 /**
@@ -43,7 +49,8 @@ export interface Customer {
  */
 export function instanceOfCustomer(value: object): value is Customer {
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('firstName' in value) || value['firstName'] === undefined) return false;
+    if (!('lastName' in value) || value['lastName'] === undefined) return false;
     return true;
 }
 
@@ -58,8 +65,9 @@ export function CustomerFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     return {
         
         'id': json['id'],
-        'name': json['name'],
-        'email': json['email'] == null ? undefined : json['email'],
+        'firstName': json['firstName'],
+        'lastName': json['lastName'],
+        'phoneNumber': json['phoneNumber'] == null ? undefined : json['phoneNumber'],
     };
 }
 
@@ -75,8 +83,9 @@ export function CustomerToJSONTyped(value?: Customer | null, ignoreDiscriminator
     return {
         
         'id': value['id'],
-        'name': value['name'],
-        'email': value['email'],
+        'firstName': value['firstName'],
+        'lastName': value['lastName'],
+        'phoneNumber': value['phoneNumber'],
     };
 }
 
