@@ -3,20 +3,23 @@ import { TicketDAO } from "@models/dao/ticketDAO";
 import { CustomerDAO } from "@models/dao/customerDAO";
 import { ServiceDAO } from "@models/dao/serviceDAO";
 import { findOrThrowNotFound, throwConflictIfFound } from "@utils";
-import { Repository, UpdateResult } from "typeorm";
+import { Repository } from "typeorm";
 import { NotFoundError } from "@models/errors/NotFoundError";
 import { BadRequestError } from "@models/errors/BadRequestError";
+import {QueueDAO} from "@dao/queueDAO";
 
 
 export class TicketRepository {
     private repo: Repository<TicketDAO>;    
     private customerRepo: Repository<CustomerDAO>;
     private serviceRepo: Repository<ServiceDAO>;
+    private queueRepo: Repository<QueueDAO>;
 
     constructor() {
         this.repo = AppDataSource.getRepository(TicketDAO);
         this.customerRepo = AppDataSource.getRepository(CustomerDAO);
         this.serviceRepo = AppDataSource.getRepository(ServiceDAO);
+        this.queueRepo = AppDataSource.getRepository(QueueDAO);
     }
 
     getAllTickets(): Promise<TicketDAO[]> {
@@ -60,11 +63,21 @@ export class TicketRepository {
             `Service with id ${id_service} not found`
         );
 
-        return this.repo.save({
+        await this.repo.save({
             ticket_code,
             customer,
             service
         });
+
+        const ticket = await this.repo.findOne({where: {ticket_code}, relations: ['service', 'customer']})
+
+        if (!ticket) {
+            throw new NotFoundError(`Ticket with code ${ticket_code} not found after creation`);
+        }
+
+        await this.queueRepo.save({ticket: ticket});
+
+        return ticket;
     }
 
     async getTicketByTicketCode(ticket_code: number): Promise<TicketDAO> {

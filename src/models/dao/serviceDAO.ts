@@ -21,6 +21,13 @@ export class ServiceDAO {
     })
     description: string | null;
 
+    @Column({
+        type: "int",
+        unsigned: true,
+        nullable: false
+    })
+    average_service_time: number;
+
     @OneToMany(
         () => TicketDAO,
         (ticket) => ticket.service,

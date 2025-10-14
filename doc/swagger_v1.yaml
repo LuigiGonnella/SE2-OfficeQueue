@@ -227,7 +227,10 @@ components:
         description:
           type: string
           example: "Passport issuance service"
-      required: [id, name]
+        averageServiceTime:
+          type: integer
+          example: 30
+      required: [id, name, averageServiceTime]
 
     Ticket:
       type: object
