@@ -224,6 +224,18 @@ components:
           type: string
           format: date-time
       required: [id, service, customer]
+
+    ErrorDTO:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: number
+        name:
+          type: string
+        message:
+          type: string
       
 
 

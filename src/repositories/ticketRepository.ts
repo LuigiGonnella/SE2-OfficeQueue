@@ -30,17 +30,41 @@ export class TicketRepository {
     }
 /*
     async createTicket(
-        ticket_code: string,
-        customer_id: string,
-        service_id: string,
+        ticket_code: number,
+        customer_id: number,
+        service_id: number
     ): Promise<TicketDAO> {
         
-        if (!ticket_code?.trim())
-            throw new BadRequestError("ticket_code cannot be empty");
-        if (!customer?.trim())
-            throw new BadRequestError("customer cannot be empty");
-        if (!service?.trim())
-            throw new BadRequestError("service cannot be empty");
-        if (isNaN(Number(ticket_code)))
-    } */
+        if (!ticket_code || !customer_id || !service_id) {
+            throw new BadRequestError("ticket_code, customer_id and service_id are required");
+        }
+
+        throwConflictIfFound(
+            await this.repo.find({ where: { ticket_code } }),
+            () => true,
+            `Ticket with code ${ticket_code} already exists`
+        );
+
+        
+        const customer = findOrThrowNotFound(
+            await customerRepo.find({ where: { customer_id } }),
+            () => true,
+            `Customer with id ${customer_id} not found`
+        );
+
+        const service = findOrThrowNotFound(
+            await serviceRepo.find({ where: { service_id } }),
+            () => true,
+            `Service with id ${service_id} not found`
+        );
+
+        return this.repo.save({
+            ticket_code,
+            customer,
+            service
+        });
+        
+    }
+
+*/
 }
