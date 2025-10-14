@@ -2,6 +2,7 @@ import { AppDataSource } from "@database";
 import { ServiceDAO } from "@models/dao/serviceDAO";
 import { findOrThrowNotFound, throwConflictIfFound } from "@utils";
 import { Repository } from "typeorm";
+import AppError from "@models/errors/AppError";
 
 export class ServiceRepository {
     private repo : Repository<ServiceDAO>;
@@ -11,17 +12,17 @@ export class ServiceRepository {
     }
 
     // recupera tutti i services
-    getAllServices(): Promise<ServiceDAO[]> {
-        return this.repo.find();
+    async getAllServices(): Promise<ServiceDAO[]> {
+        return await this.repo.find();
     }
 
     // recupera un service dal suo id
-    async getServiceById(id_service: number): Promise<ServiceDAO> {
-        const service = await this.repo.findOne({ where: { id_service }});
+    async getServiceById(id: number): Promise<ServiceDAO> {
+        const service = await this.repo.findOne({ where: { id }});
         return findOrThrowNotFound(
             [service].filter((s): s is ServiceDAO => s !== null),
             () => true,
-            `Service not found with id ${id_service}`
+            `Service not found`
         );
     }
 
@@ -36,26 +37,28 @@ export class ServiceRepository {
     }
 
     // crea un nuovo service
-    async createService(serviceData: Partial<ServiceDAO>): Promise<ServiceDAO> {
+    async createService(
+        name: string,
+        description?: string
+    ): Promise<void> {
         // Verifica che non esista già un servizio con lo stesso nome
-        const existingService = await this.repo.findOne({ 
-            where: { name: serviceData.name } 
-        });
+        if (!name || name.trim().length < 1) {
+            throw new AppError("Invalid input data", 400);
+        }
     
-        // se trova un servizio esistente con lo stesso nome, lancia un errore
-        await throwConflictIfFound(
-            [existingService], 
+        name = name.trim();
+        throwConflictIfFound(
+            await this.repo.find({ where: { name}}),
             () => true,
-            `Service with name ${serviceData.name} already exists`
+            `Service already exists with name ${name}`,
         );
 
-        const service = this.repo.create(serviceData);
-        return this.repo.save(service);
+        await this.repo.save({ name, description});
     }
 
-    // elimina un service esistente dato il suo id
-    async deleteService(id_service: number): Promise<void> {
-        const service = await this.getServiceById(id_service);
+    // elimina un service esistente dato il suo nome
+    async deleteService(name: string): Promise<void> {
+        const service = await this.getServiceByName(name);
         await this.repo.remove(service);
     }
 }

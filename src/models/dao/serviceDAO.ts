@@ -9,12 +9,15 @@ import { TicketDAO } from "@models/dao/ticketDAO";
 @Entity("service")
 export class ServiceDAO {
     @PrimaryGeneratedColumn()
-    id_service: number;
+    id: number;
 
-    @Column({ type: "varchar", unique: true })
+    @Column({ unique: true })
     name: string;
 
-    @Column({ type: "text", nullable: true })
+    @Column({ 
+        nullable: true,
+        default: null,
+    })
     description: string | null;
 
     @OneToMany(
