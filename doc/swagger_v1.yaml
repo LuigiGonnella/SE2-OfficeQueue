@@ -32,13 +32,62 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Service'
+
+    post:
+      summary: Create a new service
+      description: Create a new service with the provided details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+      responses:
+        '201':
+          description: Service created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+
+  /services/{id_service}:
+    get:
+      summary: Get a specific service by its Id
+      parameters:
+        - in: path
+          name: id_service
+          required: true
+          schema:
+            type: number
+          description: The Id of the service to retrieve
+      responses:
+        '200':
+          description: A single service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+
+    delete:
+      summary: Delete a service
+      description: Delete a service by its Id
+      parameters:
+        - in: path
+          name: id_service
+          required: true
+          schema:
+            type: number
+          description: The Id of the service to delete
+      responses:
+        '204':
+          description: Service deleted successfully
                   
-  /services/{service_name}:
+  /services/{name}:
     get:
       summary: Get a specific service by its name
       parameters:
         - in: path
-          name: service_name
+          name: name
           required: true
           schema:
             type: string
@@ -50,6 +99,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Service'
+
 
   /tickets:
     get:
@@ -96,12 +146,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ticket'
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorDTO"
+        #'400':
+         # description: Invalid input data
+          #content:
+           # application/json:
+            #  schema:
+             #   $ref: "#/components/schemas/ErrorDTO"
 
   /tickets/service/{service_name}:
     get:
@@ -122,12 +172,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Ticket'
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorDTO"
+        #'400':
+         # description: Invalid input data
+          #content:
+           # application/json:
+            #  schema:
+             #   $ref: "#/components/schemas/ErrorDTO"
         
 components:
   schemas:
