@@ -247,6 +247,49 @@ components:
           format: date-time
       required: [id, service, customer]
 
+    Queue:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        timestamp:
+          type: string
+          format: date-time
+        ticket:
+          $ref: '#/components/schemas/Ticket'
+        counter:
+          $ref: '#/components/schemas/Counter'
+        servedAt:
+          type: string
+          format: date-time
+          example: "2023-10-01T10:30:00Z"
+        served:
+          type: boolean
+          example: false
+        closedd_at:
+          type: string
+          format: date-time
+          example: "2023-10-01T11:00:00Z"
+        
+      required: [id, ticket]
+
+    Counter:
+      type: object
+      properties:
+        counter_code:
+          type: string
+          example: "C-001"
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        queues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Queue'
+      required: [counter_code, services, queues]
+
     ErrorDTO:
       type: object
       required:

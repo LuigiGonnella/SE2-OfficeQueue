@@ -37,7 +37,7 @@ export interface Service {
      */
     description?: string;
     /**
-     *
+     * 
      * @type {number}
      * @memberof Service
      */
