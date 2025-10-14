@@ -35,10 +35,10 @@ import {
 export interface Ticket {
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof Ticket
      */
-    id: string;
+    id: number;
     /**
      * 
      * @type {Service}
