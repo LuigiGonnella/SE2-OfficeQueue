@@ -55,7 +55,7 @@ export class TicketRepository {
         );
 
         const service = findOrThrowNotFound(
-            await this.serviceRepo.find({ where: { id_service } }),
+            await this.serviceRepo.find({ where: { id: id_service } }),
             () => true,
             `Service with id ${id_service} not found`
         );
@@ -77,13 +77,13 @@ export class TicketRepository {
 
     async getTicketsByServiceCode(service_code: number): Promise<TicketDAO[]> {
         findOrThrowNotFound(
-            await this.serviceRepo.find({ where: { id_service: service_code } }),
+            await this.serviceRepo.find({ where: { id: service_code } }),
             () => true,
             `Service with code ${service_code} not found`
         );
 
         return this.repo.find({
-            where: { service: { id_service: service_code } },
+            where: { service: { id: service_code } },
             relations: ['service', 'customer']
         });
     }
