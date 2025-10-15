@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/LuigiGonnella/SE2-OfficeQueue#readme",
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "config": "^4.1.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
