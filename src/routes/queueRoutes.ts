@@ -46,7 +46,18 @@ router.post('/next/:counterId', async (req, res, next) => {
 router.get('/served/:counterId', async (req, res, next) => {
     try {
         const counterId = parseInt(req.params.counterId);
-        const result = await getServedByCounter(counterId);
+        const served = await getServedByCounter(counterId);
+        const result = served.map((entry) => {
+            return {
+                id: entry.id,
+                number: entry.ticket.ticket_code,
+                service: entry.ticket.service.name,
+                createdAt: entry.timestamp!.toISOString(),
+                served: entry.served,
+                servedAt: entry.served_at ? entry.served_at.toISOString() : undefined,
+                closedAt: entry.closed_at ? entry.closed_at.toISOString() : undefined,
+            }
+        })
         res.status(200).json(result);
     } catch (error) {
         next(error);

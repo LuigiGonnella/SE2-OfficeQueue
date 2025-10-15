@@ -61,6 +61,7 @@ export class QueueRepository {
         return this.repo.createQueryBuilder("queue")
             .leftJoinAndSelect("queue.ticket", "ticket")
             .leftJoinAndSelect("queue.counter", "counter")
+            .leftJoinAndSelect("ticket.service", "service")
             .andWhere("counter.id = :id_counter", { id_counter })
             .andWhere("queue.closed_at BETWEEN :startOfDay AND :endOfDay", { startOfDay, endOfDay })
             .orderBy("queue.closed_at", "DESC")
@@ -77,10 +78,10 @@ export class QueueRepository {
             .getMany();
     }
 
-    async serveQueueEntry(id: number): Promise<void> {
+    async serveQueueEntry(id: number, counter_id: number): Promise<void> {
         await this.repo.createQueryBuilder()
             .update(QueueDAO)
-            .set({ served: true, served_at: new Date(), closed_at: new Date() })
+            .set({ served: true, served_at: new Date(), counter: { id: counter_id } })
             .where("id = :id", { id })
             .execute();
     }

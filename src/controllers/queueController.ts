@@ -1,10 +1,10 @@
 import {Queue as QueueDTO} from "@models/dto/Queue";
-import { Ticket } from "@models/dto/Ticket";
-import { QueueRepository } from "@repositories/queueRepository";
-import { CounterRepository } from "@repositories/counterRepository";
-import { mapQueueDAOToDTO, mapServiceDAOToDTO, mapTicketDAOToDTO } from "@services/mapperService";
-import { ServiceDAO } from "@models/dao/serviceDAO";
-import { QueueDAO } from "@models/dao/queueDAO";
+import {Ticket} from "@models/dto/Ticket";
+import {QueueRepository} from "@repositories/queueRepository";
+import {CounterRepository} from "@repositories/counterRepository";
+import {mapQueueDAOToDTO, mapTicketDAOToDTO} from "@services/mapperService";
+import {ServiceDAO} from "@models/dao/serviceDAO";
+import {QueueDAO} from "@models/dao/queueDAO";
 
 export async function getAllQueues(): Promise<QueueDTO[]> {
     const queueRepo = new QueueRepository();
@@ -65,7 +65,7 @@ export async function nextCustomer(counterId: number): Promise<Ticket | null> {
         }
         const currentQueueEntry = await queueRepo.getCurrentQueueByService(service.id);
 
-        await queueRepo.serveQueueEntry(currentQueueEntry ? currentQueueEntry[0].id : -1); //serve first ticket in queue
+        await queueRepo.serveQueueEntry(currentQueueEntry ? currentQueueEntry[0].id : -1, counterId); //serve first ticket in queue
         return currentQueueEntry && currentQueueEntry.length > 0 ? mapTicketDAOToDTO(currentQueueEntry[0].ticket) : null;
     }
     else { //if not unique we serve the service with lowest service time
@@ -84,16 +84,15 @@ export async function nextCustomer(counterId: number): Promise<Ticket | null> {
         }
         const currentQueueEntry = await queueRepo.getCurrentQueueByService(selectedService.id);
 
-        await queueRepo.serveQueueEntry(currentQueueEntry ? currentQueueEntry[0].id : -1); //serve first ticket in queue
+        await queueRepo.serveQueueEntry(currentQueueEntry ? currentQueueEntry[0].id : -1, counterId); //serve first ticket in queue
         return currentQueueEntry && currentQueueEntry.length > 0 ? mapTicketDAOToDTO(currentQueueEntry[0].ticket) : null;
     }
 
 }
 
-export async function getServedByCounter(counterId: number): Promise<QueueDTO[]> {
+export async function getServedByCounter(counterId: number): Promise<QueueDAO[]> {
     const queueRepo = new QueueRepository();
-    const queues = await queueRepo.getServedByCounterToday(counterId);
-    return queues.map(mapQueueDAOToDTO);
+    return await queueRepo.getServedByCounterToday(counterId);
 }
 
 export async function closeQueueEntry(ticket_id: number): Promise<void> {
