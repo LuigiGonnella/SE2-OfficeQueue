@@ -12,16 +12,26 @@ function ServiceCreation() {
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            await api.servicesPost({
-                id: 0,
-                ...formData
-            });
-            // Reset form after successful creation
-            setFormData({ name: '', description: '' });
-        } catch (err) {
-            console.error('Error creating service:', err);
+    e.preventDefault();
+    try {
+        const serviceData = {
+            id: Math.floor(Math.random() * 1000), // Temporary ID generation
+            name: formData.name,
+            description: formData.description
+        };
+        
+        console.log('Sending service data:', serviceData);
+        const response = await api.servicesPost(serviceData);
+        console.log('Response:', response);
+        
+        setFormData({ name: '', description: '' });
+    } catch (err: any) {
+        console.error('Full error:', {
+            message: err.message,
+            status: err.response?.status,
+            data: err.response?.data,
+            config: err.config
+        });
         }
     };
 
