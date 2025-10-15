@@ -40,8 +40,16 @@ export class TicketRepository {
         id_service: number
     ): Promise<TicketDAO> {
 
-        if (!ticket_code || !customer_id || !id_service) {
-            throw new BadRequestError("ticket_code, customer_id and id_service are required");
+        if (!ticket_code) {
+            throw new BadRequestError("Ticket code is required");
+        }
+
+        if(!customer_id){
+            throw new BadRequestError("Customer ID is required");
+        }
+
+        if(!id_service){
+            throw new BadRequestError("Service ID is required");
         }
 
         throwConflictIfFound(
@@ -49,8 +57,7 @@ export class TicketRepository {
             () => true,
             `Ticket with code ${ticket_code} already exists`
         );
-
-        
+ 
         const customer = findOrThrowNotFound(
             await this.customerRepo.find({ where: { customer_id } }),
             () => true,
