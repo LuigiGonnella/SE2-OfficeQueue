@@ -1,18 +1,26 @@
-import {Col, Row, Button} from "react-bootstrap";
+import {Col, Row, Button, ButtonGroup} from "react-bootstrap";
 import { Link, useNavigate } from "react-router";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import QNavbar from "../components/QNavbar.tsx";
+
 
 function HomePage() {
+    const navigate = useNavigate();
+
     return (
         <>
-        <Row className="vh-100 justify-content-center align-items-center">
-            <Col md={10} lg={8} className="text-center">
-                <Link className="button" to="/officers">Officer</Link>
-                <Link className="button" to="/services">Customer</Link>
-            </Col>
-        </Row>
-            
-        
+            <QNavbar />
+            <div className="d-flex justify-content-center align-items-center" style={{height: '85vh'}}>
+                <Col className="w-100 text-center">
+                    <h1 className="pb-5">Select interface</h1>
+                    <ButtonGroup vertical={true} style={{width: '300px'}}>
+                        <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/services')}>Customer Panel</Button>
+                        <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/officers')}>Officer Panel</Button>
+                        <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/board')}>Info Board</Button>
+                        <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/newservice')}>New Service</Button>
+                    </ButtonGroup>
+                </Col>
+            </div>
         </>
     )
 }

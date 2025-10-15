@@ -29,7 +29,7 @@ router.get("/:ticketCode", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     try {
-        await createTicket(TicketFromJSON(req.body), req.body.customer_id, req.body.service_id);
+        await createTicket(req.body.ticket_id, req.body.customer_id, req.body.service_id);
         res.status(201).send();
     } catch (error) {  
         next(error);

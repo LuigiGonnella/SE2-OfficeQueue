@@ -1,6 +1,5 @@
 import {Col, Row, Button, Card, ListGroup, Container, Form} from "react-bootstrap";
 import { Link, useNavigate } from "react-router";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { api } from "../services/apiService.ts";
 import React, { useState, useEffect } from 'react';
 import type { Service } from "../API/api.ts";
@@ -17,7 +16,8 @@ function ServiceCreation() {
         const serviceData = {
             id: Math.floor(Math.random() * 1000), // Temporary ID generation
             name: formData.name,
-            description: formData.description
+            description: formData.description,
+            averageServiceTime: Math.floor(Math.random() * 1000), // Temporary ID generation
         };
         
         console.log('Sending service data:', serviceData);

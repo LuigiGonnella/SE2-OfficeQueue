@@ -39,10 +39,11 @@ export class ServiceRepository {
     // crea un nuovo service
     async createService(
         name: string,
+        average_service_time: number,
         description?: string
     ): Promise<void> {
         // Verifica che non esista già un servizio con lo stesso nome
-        if (!name || name.trim().length < 1) {
+        if (!name || name.trim().length < 1 || average_service_time <= 0) {
             throw new AppError("Invalid input data", 400);
         }
     
@@ -53,7 +54,7 @@ export class ServiceRepository {
             `Service already exists with name ${name}`,
         );
 
-        await this.repo.save({ name, description});
+        await this.repo.save({ name, average_service_time, description});
     }
 
     // elimina un service esistente dato il suo nome

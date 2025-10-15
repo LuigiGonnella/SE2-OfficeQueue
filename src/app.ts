@@ -8,6 +8,8 @@ import * as OpenApiValidator from "express-openapi-validator";
 import customerRouter from "@routes/customerRoutes";
 import ticketRouter from "@routes/ticketRoutes";
 import serviceRouter from "@routes/serviceRoutes";
+import queueRouter from "@routes/queueRoutes";
+import counterRouter from "@routes/counterRoutes";
 import "reflect-metadata";
 
 export const app = express();
@@ -31,13 +33,14 @@ app.use(
     apiSpec: CONFIG.SWAGGER_V1_FILE_PATH,
         validateApiSpec: true,
         validateRequests: true,
-        validateResponses: true,
     })
 )
 
 app.use(CONFIG.ROUTES.V1_CUSTOMERS, customerRouter);
 app.use(CONFIG.ROUTES.V1_SERVICES, serviceRouter);
 app.use(CONFIG.ROUTES.V1_TICKETS, ticketRouter);
+app.use(CONFIG.ROUTES.V1_QUEUES, queueRouter);
+app.use(CONFIG.ROUTES.V1_COUNTERS, counterRouter)
 
 //This must always be the last middleware added
 app.use(errorHandler);

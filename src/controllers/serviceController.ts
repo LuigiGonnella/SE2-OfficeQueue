@@ -19,6 +19,7 @@ export async function getServiceByName(name: string): Promise<ServiceDTO> {
 export async function createService(serviceDto: ServiceDTO): Promise<void> {
     await serviceRepo.createService(
         serviceDto.name,
+        serviceDto.averageServiceTime,
         serviceDto.description,
     );
 }
