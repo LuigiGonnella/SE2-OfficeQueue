@@ -7,7 +7,7 @@ function HomePage() {
         <>
         <Row className="vh-100 justify-content-center align-items-center">
             <Col md={10} lg={8} className="text-center">
-                <Link className="button" to="/officer">Officer</Link>
+                <Link className="button" to="/officers">Officer</Link>
                 <Link className="button" to="/services">Customer</Link>
             </Col>
         </Row>
