@@ -3,37 +3,37 @@ import {getAllQueues, getQueueByService, nextCustomer} from "@controllers/queueC
 
 const router = Router({mergeParams:true});
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res, next) => {
     try {
-        const result = getAllQueues();
+        const result = await getAllQueues();
         res.status(200).json(result);
     } catch (error) {
-        res.status(500).send('Error retrieving queues');
+        next(error);
     }
 });
 
 
-router.get('/:serviceId', (req, res) => {
+router.get('/:serviceId', async (req, res, next) => {
     try {
         const serviceId = parseInt(req.params.serviceId);
-        const result = getQueueByService(serviceId);
-        res.send(result);
+        const result = await getQueueByService(serviceId);
+        res.status(200).json(result);
     } catch (error) {
-        res.status(500).send('Error retrieving queue');
+        next(error);
     }
 });
 
-router.post('/next/:counterId', (req, res) => {
+router.post('/next/:counterId', async (req, res, next) => {
     try {
         const counterId = parseInt(req.params.counterId);
-        const result = nextCustomer(counterId);
+        const result = await nextCustomer(counterId);
         if (result) {
             res.status(200).json(result);
         } else {
             res.status(204).send(); // No Content
         }
     } catch (error) {
-        res.status(500).send('Error processing next customer');
+        next(error);
     }
 });
 
