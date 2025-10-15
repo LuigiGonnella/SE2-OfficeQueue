@@ -15,7 +15,10 @@ import "reflect-metadata";
 export const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 
 app.use(
   CONFIG.ROUTES.V1_SWAGGER,
@@ -41,3 +44,5 @@ app.use(CONFIG.ROUTES.V1_COUNTERS, counterRouter)
 
 //This must always be the last middleware added
 app.use(errorHandler);
+
+
