@@ -1,7 +1,6 @@
-import {Col, Row, Button, Card, ListGroup, Container, Form} from "react-bootstrap";
-import { Link, useNavigate } from "react-router";
+import {Button, Card, Container, Form} from "react-bootstrap";
 import { api } from "../services/apiService.ts";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { Service } from "../API/api.ts";
 
 function ServiceCreation() {

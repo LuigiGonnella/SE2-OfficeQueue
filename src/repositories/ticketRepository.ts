@@ -35,14 +35,9 @@ export class TicketRepository {
     }
 
     async createTicket(
-        ticket_code: number,
         customer_id: number,
         id_service: number
     ): Promise<TicketDAO> {
-
-        if (!ticket_code) {
-            throw new BadRequestError("Ticket code is required");
-        }
 
         if(!customer_id){
             throw new BadRequestError("Customer ID is required");
@@ -51,13 +46,6 @@ export class TicketRepository {
         if(!id_service){
             throw new BadRequestError("Service ID is required");
         }
-
-
-        throwConflictIfFound(
-            await this.repo.find({ where: { ticket_code } }),
-            () => true,
-            `Ticket with code ${ticket_code} already exists`
-        );
 
         
         const customer = findOrThrowNotFound(
@@ -72,16 +60,15 @@ export class TicketRepository {
             `Service with id ${id_service} not found`
         );
 
-        await this.repo.save({
-            ticket_code,
+        const ticket2 = await this.repo.save({
             customer,
             service
         });
 
-        const ticket = await this.repo.findOne({where: {ticket_code}, relations: ['service', 'customer']})
+        const ticket = await this.repo.findOne({where: {ticket_code: ticket2.ticket_code}, relations: ['service', 'customer']})
 
         if (!ticket) {
-            throw new NotFoundError(`Ticket with code ${ticket_code} not found after creation`);
+            throw new NotFoundError(`Ticket with code ${ticket2.ticket_code} not found after creation`);
         }
 
         await this.queueRepo.save({ticket: ticket});
