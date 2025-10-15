@@ -10,6 +10,7 @@ export class CounterRepository {
 
     constructor() {
         this.repo = AppDataSource.getRepository(CounterDAO);
+        this.serviceRepo = AppDataSource.getRepository(ServiceDAO);
     }
 
     getAllCounters(): Promise<CounterDAO[]> {

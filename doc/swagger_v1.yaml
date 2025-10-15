@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: API for the project
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:8080/api/v1
     description: Local server
 paths:
   /customers:
@@ -137,7 +137,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ticket'
+              type: object
+              properties:
+                serviceId:
+                  type: integer
+                  example: 10
+                customerId:
+                  type: integer
+                  example: 1
       responses:
         '201':
           description: Ticket created successfully
@@ -195,6 +202,140 @@ paths:
            # application/json:
             #  schema:
              #   $ref: "#/components/schemas/ErrorDTO"
+  /counters:
+    get:
+      summary: Get all counters
+      responses:
+        '200':
+          description: A list of counters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Counter'
+    post:
+      summary: Create a new counter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                serviceIds:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        '201':
+          description: Counter created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counter'
+  /counters/{id}/services:
+    get:
+      summary: Get services for a specific counter
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the counter
+      responses:
+        '200':
+          description: A list of services for the specified counter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+  /queues:
+    get:
+      summary: Get all queues
+      responses:
+        '200':
+          description: A list of queues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Queue'
+    post:
+      summary: Create a new queue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Queue'
+      responses:
+        '201':
+          description: Queue created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Queue'
+  /queues/served/{counter_id}:
+    get:
+      summary: Get daily served queues for a specific counter
+      parameters:
+        - in: path
+          name: counter_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the counter
+      responses:
+        '200':
+          description: A list of served queues for the specified counter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Queue'
+  /queues/next/{counter_id}:
+    post:
+      summary: Get the next ticket in queue for a specific counter
+      parameters:
+        - in: path
+          name: counter_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the counter
+      responses:
+        '201':
+          description: The next queue for the specified counter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Queue'
+  /queues/{ticket_id}/close:
+    post:
+      summary: Close a specific queue by ticket ID
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the ticket whose queue is to be closed
+      responses:
+        '200':
+          description: Queue closed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Queue'
         
 components:
   schemas:

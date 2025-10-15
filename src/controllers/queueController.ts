@@ -89,3 +89,14 @@ export async function nextCustomer(counterId: number): Promise<Ticket | null> {
     }
 
 }
+
+export async function getServedByCounter(counterId: number): Promise<QueueDTO[]> {
+    const queueRepo = new QueueRepository();
+    const queues = await queueRepo.getServedByCounterToday(counterId);
+    return queues.map(mapQueueDAOToDTO);
+}
+
+export async function closeQueueEntry(ticket_id: number): Promise<void> {
+    const queueRepo = new QueueRepository();
+    await queueRepo.closeQueueEntry(ticket_id);
+}

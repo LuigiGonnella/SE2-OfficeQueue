@@ -8,6 +8,7 @@ const URL_CUSTOMERS = "/customers";
 const URL_SERVICES = "/services";
 const URL_TICKETS = "/tickets";
 const URL_QUEUES = "/queues";
+const URL_COUNTERS = "/counters";
 
 export const CONFIG = {
 	APP_PORT: process.env.PORT || 8080,
@@ -34,6 +35,7 @@ export const CONFIG = {
 		V1_SERVICES: APP_V1_BASE_URL + URL_SERVICES,
 		V1_TICKETS: APP_V1_BASE_URL + URL_TICKETS,
 		V1_QUEUES: APP_V1_BASE_URL + URL_QUEUES,
+		V1_COUNTERS: APP_V1_BASE_URL + URL_COUNTERS,
 	},
 	LOG_LEVEL: process.env.LOG_LEVEL || "info",
 	LOG_PATH: process.env.LOG_PATH || "logs",

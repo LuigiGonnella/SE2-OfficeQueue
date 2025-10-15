@@ -9,17 +9,17 @@ export async function getAllCounters(): Promise<CounterDTO[]> {
     return (await counterRepo.getAllCounters()).map(mapCounterDAOToDTO);
 }
 
-export async function createCounter(counterDto: CounterDTO): Promise<void> {
-    await counterRepo.createCounter(
-        counterDto.id,
-        counterDto.services.map(s => s.id)
-    );
+export async function createCounter(counter: {id: number, serviceIds: number[]}): Promise<CounterDTO> {
+    return await counterRepo.createCounter(
+        counter.id,
+        counter.serviceIds
+    ).then(mapCounterDAOToDTO);
 }
 
-export async function updateCounter(counterDto: CounterDTO): Promise<void> {
+export async function updateCounter(counter: {id: number, serviceIds: number[]}): Promise<void> {
     await counterRepo.updateCounter(
-        counterDto.id,
-        counterDto.services.map(s => s.id)
+        counter.id,
+        counter.serviceIds
     );
 }
 

@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {TicketDAO} from "@dao/ticketDAO";
 import {CounterDAO} from "@dao/counterDAO";
 
@@ -12,14 +12,14 @@ export class QueueDAO {
 
     @OneToOne(
         () => TicketDAO,
-        (ticket) => ticket.ticket_code,
-        { cascade: true, onDelete: 'CASCADE' }
+        (ticket) => ticket.queue,
     )
+    @JoinColumn()
     ticket: TicketDAO;
 
     @ManyToOne(
         () => CounterDAO,
-        (counter) => counter.id,
+        (counter) => counter.queues,
         { nullable: true, onDelete: 'SET NULL' }
     )
     counter: CounterDAO | null = null;

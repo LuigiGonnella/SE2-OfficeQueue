@@ -47,8 +47,23 @@ export class QueueRepository {
         return this.repo.createQueryBuilder("queue")
             .leftJoinAndSelect("queue.ticket", "ticket")
             .where("queue.served = :served", { served: true })
-            .orderBy("queue.served_at", "DESC")
+            .orderBy("queue.closed_at", "DESC")
             .limit(5)
+            .getMany();
+    }
+
+    getServedByCounterToday(id_counter: number): Promise<QueueDAO[]> {
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+
+        return this.repo.createQueryBuilder("queue")
+            .leftJoinAndSelect("queue.ticket", "ticket")
+            .leftJoinAndSelect("queue.counter", "counter")
+            .andWhere("counter.id = :id_counter", { id_counter })
+            .andWhere("queue.closed_at BETWEEN :startOfDay AND :endOfDay", { startOfDay, endOfDay })
+            .orderBy("queue.closed_at", "DESC")
             .getMany();
     }
 
@@ -67,6 +82,14 @@ export class QueueRepository {
             .update(QueueDAO)
             .set({ served: true, served_at: new Date(), closed_at: new Date() })
             .where("id = :id", { id })
+            .execute();
+    }
+
+    async closeQueueEntry(ticket_id: number): Promise<void> {
+        await this.repo.createQueryBuilder()
+            .update("queue")
+            .set({ closed_at: new Date() })
+            .where("ticketTicketCode = :ticket_id", { ticket_id })
             .execute();
     }
 }

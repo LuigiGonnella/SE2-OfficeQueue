@@ -2,9 +2,10 @@ import {
     Entity,
     Column,
     OneToMany,
-    PrimaryGeneratedColumn,
+    PrimaryGeneratedColumn, ManyToMany,
 } from "typeorm";
 import { TicketDAO } from "@models/dao/ticketDAO";
+import {CounterDAO} from "@dao/counterDAO";
 
 @Entity("service")
 export class ServiceDAO {
@@ -34,4 +35,7 @@ export class ServiceDAO {
         { onDelete: 'CASCADE' }
     )
     tickets: TicketDAO[];
+
+    @ManyToMany(() => CounterDAO, (counter) => counter.services)
+    counters: CounterDAO[];
 }
