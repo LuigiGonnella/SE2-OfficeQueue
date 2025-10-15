@@ -4,7 +4,8 @@ import {
     getAllQueues,
     getQueueByService,
     getServedByCounter,
-    nextCustomer
+    nextCustomer, 
+    getLastSixCustomer
 } from "@controllers/queueController";
 
 const router = Router({mergeParams:true});
@@ -72,6 +73,23 @@ router.post('/:ticket_id/close', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+})
+
+router.get('/recent-calls', async (req, res, next) => {
+    try {
+        const calls = await getLastSixCustomer();
+        const result = calls.map((entry) => {
+            return {
+                number: entry.ticket.ticket_code,
+                service: entry.ticket.service.name,
+                createdAt: entry.timestamp!.toISOString(),
+                counter: entry.counter?.id
+            }
+        })
+        res.status(200).json(result);
+   } catch (error) {
+        next(error)
+   }
 })
 
 

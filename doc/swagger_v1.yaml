@@ -336,7 +336,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Queue'
-        
+      
+  /queues/recent_calls:
+    get:
+      summary: Get the last 6 customers
+      responses:
+        '200':
+          description: List of the last 6 customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties: 
+                    number: 
+                      type: integer
+                    service:
+                      type: string  
+                    createAt:
+                      type: string
+                    counter:
+                      type: integer
+
 components:
   schemas:
     Customer:

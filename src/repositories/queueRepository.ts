@@ -43,12 +43,13 @@ export class QueueRepository {
             .getMany();
     }
 
-    getLastFiveServed(): Promise<QueueDAO[]> {
+    getLastSixServed(): Promise<QueueDAO[]> {
         return this.repo.createQueryBuilder("queue")
             .leftJoinAndSelect("queue.ticket", "ticket")
+            .leftJoinAndSelect("ticket.service", "service")
             .where("queue.served = :served", { served: true })
-            .orderBy("queue.closed_at", "DESC")
-            .limit(5)
+            .orderBy("queue.served_at", "DESC")
+            .limit(6)
             .getMany();
     }
 
