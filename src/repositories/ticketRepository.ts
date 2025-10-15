@@ -88,5 +88,31 @@ export class TicketRepository {
         });
     }
 
+        async getQueueLengthsByService(): Promise<{ id_service: number; service_name: string; waiting_count: number; }[]> {
+        const allServices = await this.serviceRepo.find();
+        if (!allServices || allServices.length === 0) {
+            throw new NotFoundError("No services found");
+        }
 
+        const query = await this.repo.createQueryBuilder("ticket")
+            .leftJoin("ticket.service", "service")
+            .select("service.id", "id_service")
+            .addSelect("service.name", "service_name")
+            .addSelect("COUNT(ticket.ticket_code)", "waiting_count")
+            .where("ticket.status = :status", { status: "waiting" })
+            .groupBy("service.id")
+            .addGroupBy("service.name")
+            .getRawMany();
+
+        const result = allServices.map(s => {
+            const found = query.find(q => q.id_service === s.id);
+            return {
+                id_service: s.id,
+                service_name: s.name,
+                waiting_count: found ? Number(found.waiting_count) : 0
+            };
+        });
+
+        return result;
+    }
 }
