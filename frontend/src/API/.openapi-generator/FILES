@@ -1,0 +1,14 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
+api.ts
+base.ts
+common.ts
+configuration.ts
+docs/Customer.md
+docs/DefaultApi.md
+docs/ErrorDTO.md
+docs/Service.md
+docs/Ticket.md
+git_push.sh
+index.ts
