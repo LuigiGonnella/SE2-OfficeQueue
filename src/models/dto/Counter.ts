@@ -35,10 +35,10 @@ import {
 export interface Counter {
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof Counter
      */
-    counterCode: string;
+    id: number;
     /**
      * 
      * @type {Array<Service>}
@@ -57,7 +57,7 @@ export interface Counter {
  * Check if a given object implements the Counter interface.
  */
 export function instanceOfCounter(value: object): value is Counter {
-    if (!('counterCode' in value) || value['counterCode'] === undefined) return false;
+    if (!('id' in value) || value['id'] === undefined) return false;
     if (!('services' in value) || value['services'] === undefined) return false;
     if (!('queues' in value) || value['queues'] === undefined) return false;
     return true;
@@ -73,7 +73,7 @@ export function CounterFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     }
     return {
         
-        'counterCode': json['counter_code'],
+        'id': json['id'],
         'services': ((json['services'] as Array<any>).map(ServiceFromJSON)),
         'queues': ((json['queues'] as Array<any>).map(QueueFromJSON)),
     };
@@ -90,7 +90,7 @@ export function CounterToJSONTyped(value?: Counter | null, ignoreDiscriminator: 
 
     return {
         
-        'counter_code': value['counterCode'],
+        'id': value['id'],
         'services': ((value['services'] as Array<any>).map(ServiceToJSON)),
         'queues': ((value['queues'] as Array<any>).map(QueueToJSON)),
     };

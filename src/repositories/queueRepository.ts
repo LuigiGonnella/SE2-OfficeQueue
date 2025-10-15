@@ -51,4 +51,22 @@ export class QueueRepository {
             .limit(5)
             .getMany();
     }
+
+    getAllQueueEntriesByService(id_service: number): Promise<QueueDAO[]> {
+        return this.repo.createQueryBuilder("queue")
+            .leftJoinAndSelect("queue.ticket", "ticket")
+            .leftJoinAndSelect("ticket.service", "service")
+            .where("service.id = :id_service", { id_service })
+            .andWhere("queue.served = :served", { served: false })
+            .orderBy("queue.timestamp", "ASC")
+            .getMany();
+    }
+
+    async serveQueueEntry(id: number): Promise<void> {
+        await this.repo.createQueryBuilder()
+            .update(QueueDAO)
+            .set({ served: true, served_at: new Date(), closed_at: new Date() })
+            .where("id = :id", { id })
+            .execute();
+    }
 }

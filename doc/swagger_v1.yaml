@@ -237,7 +237,7 @@ components:
       properties:
         id:
           type: number
-          example: "TCK-0001"
+          example: 1001
         service:
           $ref: '#/components/schemas/Service'
         customer:
@@ -277,9 +277,9 @@ components:
     Counter:
       type: object
       properties:
-        counter_code:
-          type: string
-          example: "C-001"
+        id:
+          type: number
+          example: 1
         services:
           type: array
           items:
@@ -288,7 +288,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Queue'
-      required: [counter_code, services, queues]
+      required: [id, services, queues]
+    
+    Officer:
+      type: object
+      properties:
+        officer_code:
+          type: integer
+          example: 1
+        counter:
+          $ref: '#/components/schemas/Counter'
+      required: [officer_code, counter]
 
     ErrorDTO:
       type: object

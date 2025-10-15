@@ -58,7 +58,7 @@ export function mapQueueDAOToDTO(queue: QueueDAO): QueueDTO {
 //COUNTER DTO
 export function mapCounterDAOToDTO(counter: CounterDAO): CounterDTO {
   return removeNullAttributes({
-    counter_code: counter.counter_code,
+    counter_code: counter.id,
     services: counter.services ? counter.services.map(mapServiceDAOToDTO) : undefined,
     queues: counter.queues ? counter.queues.map(mapQueueDAOToDTO) : undefined,
   }) as CounterDTO;

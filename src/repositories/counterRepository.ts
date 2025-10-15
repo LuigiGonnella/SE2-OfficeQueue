@@ -16,16 +16,16 @@ export class CounterRepository {
         return this.repo.find({ relations: ["services"] });
     }
 
-    getCounterByCode(counter_code: string): Promise<CounterDAO | null> {
+    getCounterById(counterId: number): Promise<CounterDAO | null> {
         return this.repo.findOne({
-            where: { counter_code },
+            where: { id: counterId },
             relations: ["services"]
         });
     }
 
-    async createCounter(counter_code: string, serviceIds: number[]): Promise<CounterDAO> {
+    async createCounter(counterId: number, serviceIds: number[]): Promise<CounterDAO> {
         const counter = new CounterDAO();
-        counter.counter_code = counter_code;
+        counter.id = counterId;
         const services = serviceIds.map(async (id) => {
             return findOrThrowNotFound(
                 await this.serviceRepo.find({where: {id}}),
@@ -37,9 +37,9 @@ export class CounterRepository {
         return this.repo.save(counter);
     }
 
-    async updateCounter(counter_code: string, serviceIds: number[]): Promise<CounterDAO> {
+    async updateCounter(counter_code: number, serviceIds: number[]): Promise<CounterDAO> {
         const counter = findOrThrowNotFound(
-            await this.repo.find({ where: { counter_code } }),
+            await this.repo.find({ where: { id: counter_code } }),
             () => true,
             `Counter with code ${counter_code} not found`
         )
@@ -52,5 +52,14 @@ export class CounterRepository {
         });
         counter.services = await Promise.all(services);
         return this.repo.save(counter);
+    }
+
+    async getAllServicesByCounter(counter_code: number): Promise<ServiceDAO[]> {
+        const counter = findOrThrowNotFound(
+            await this.repo.find({ where: { id: counter_code }, relations: ["services"] }),
+            () => true,
+            `Counter with code ${counter_code} not found`
+        )
+        return counter.services;
     }
 }

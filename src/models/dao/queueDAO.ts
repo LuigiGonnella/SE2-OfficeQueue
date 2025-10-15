@@ -19,7 +19,8 @@ export class QueueDAO {
 
     @ManyToOne(
         () => CounterDAO,
-        (counter) => counter.counter_code
+        (counter) => counter.id,
+        { nullable: true, onDelete: 'SET NULL' }
     )
     counter: CounterDAO | null = null;
 
