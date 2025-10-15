@@ -2,6 +2,7 @@ import { Router } from "express";
 import AppError from "@models/errors/AppError";
 import { getAllTickets, createTicket, getTicket } from "@controllers/ticketController";
 import { TicketFromJSON } from "@models/dto/Ticket";
+import { mapTicketDAOToDTO } from "@services/mapperService";
 
 const router = Router({mergeParams:true});
 
@@ -29,9 +30,9 @@ router.get("/:ticketCode", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     try {
-        await createTicket(req.body.ticket_id, req.body.customer_id, req.body.service_id);
-        res.status(201).send();
-    } catch (error) {  
+        const ticket = await createTicket(req.body.customer, req.body.service);
+        res.status(201).json(mapTicketDAOToDTO(ticket));
+    } catch (error) {
         next(error);
     }
 });

@@ -26,7 +26,7 @@ export type QueueEntry = {
 };
 
 export type Ticket = {
-    ticket_code: number;
+    id: number;
     customer: Customer;
     service: Service;
 }

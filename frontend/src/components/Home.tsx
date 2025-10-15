@@ -18,6 +18,7 @@ function HomePage() {
                         <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/officers')}>Officer Panel</Button>
                         <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/board')}>Info Board</Button>
                         <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/newservice')}>New Service</Button>
+                        <Button variant="outline-primary" className="my-2" style={{height: '75px'}} onClick={() => navigate('/newcustomer')}>New Customer</Button>
                     </ButtonGroup>
                 </Col>
             </div>

@@ -13,8 +13,7 @@ import {
   Accordion,
 } from "react-bootstrap";
 import type {Counter, Service, QueueEntry, Ticket} from "../API/types.ts";
-import type { Service as Service2 } from "../API/api.ts";
-import { api } from "../services/apiService.ts";
+
 
 const API = (() => {
   const BASE_URL = "http://localhost:8080/api/v1";
@@ -22,17 +21,17 @@ const API = (() => {
   return {
     async fetchCounters(): Promise<Counter[]> {
       const res = await fetch(`${BASE_URL}/counters`);
-      if (!res.ok) throw new Error("Impossibile caricare i counter");
+      if (!res.ok) throw new Error("Cannot load counters.");
       return res.json();
     },
     async fetchServicesByCounter(counterId: number): Promise<Service[]> {
       const res = await fetch(`${BASE_URL}/counters/${counterId}/services`);
-      if (!res.ok) throw new Error("Impossibile caricare i servizi del counter");
+      if (!res.ok) throw new Error("Cannot load services for this counter.");
       return res.json();
     },
     async fetchServedTicketsByCounterGrouped(counterId: number): Promise<Record<string, QueueEntry[]>> {
       const res = await fetch(`${BASE_URL}/queues/served/${counterId}`);
-      if (!res.ok) throw new Error("Impossibile caricare i ticket serviti");
+      if (!res.ok) throw new Error("Cannot load served tickets for the counter.");
       const tickets: QueueEntry[] = await res.json();
       const grouped: Record<string, QueueEntry[]> = {};
       tickets.forEach((t) => {
@@ -44,12 +43,12 @@ const API = (() => {
     async callNext(counterId: number): Promise<Ticket | null> {
       const res = await fetch(`${BASE_URL}/queues/next/${counterId}`, { method: "POST" });
       if (res.status === 204) return null;
-      if (!res.ok) throw new Error("Errore durante la chiamata del prossimo cliente");
+      if (!res.ok) throw new Error("Error while calling the next ticket.");
       return res.json();
     },
     async closeTicket(ticketId: number): Promise<void> {
       const res = await fetch(`${BASE_URL}/queues/${ticketId}/close`, { method: "POST" });
-      if (!res.ok) throw new Error("Errore durante la chiusura del ticket");
+      if (!res.ok) throw new Error("Error while closing the ticket.");
     },
   };
 })();
@@ -70,7 +69,7 @@ function OfficerPanel() {
     setLoading(true);
     API.fetchCounters()
       .then((res) => mounted && setCounters(res))
-      .catch((e: any) => setError(e.message ?? "Errore caricando i counter"))
+      .catch((e: any) => setError(e.message ?? "Error loading counters."))
       .finally(() => setLoading(false));
     return () => {
       mounted = false;
@@ -95,7 +94,7 @@ function OfficerPanel() {
         setServices(srv);
         setServedByService(grouped);
       })
-      .catch((e: any) => setError(e.message ?? "Errore caricando i dati del counter"))
+      .catch((e: any) => setError(e.message ?? "Error loading counter data."))
       .finally(() => setLoading(false));
     return () => {
       mounted = false;
@@ -108,10 +107,10 @@ function OfficerPanel() {
     setError(null);
     try {
       const t = await API.callNext(selectedCounterId);
-      if (!t) setError("Nessun cliente in attesa per questo counter.");
+      if (!t) setError("No customer can be served at this counter at the moment.");
       setCurrentTicket(t ?? null);
     } catch (e: any) {
-      setError(e.message ?? "Errore durante la chiamata del prossimo cliente.");
+      setError(e.message ?? "Error while calling the next customer.");
     } finally {
       setLoadingNext(false);
     }
@@ -121,14 +120,14 @@ function OfficerPanel() {
     if (!currentTicket) return;
     setLoadingNext(true);
     try {
-      await API.closeTicket(currentTicket.ticket_code);
+      await API.closeTicket(currentTicket.id);
       setCurrentTicket(null);
       if (selectedCounterId != null) {
         const grouped = await API.fetchServedTicketsByCounterGrouped(selectedCounterId);
         setServedByService(grouped);
       }
     } catch (e: any) {
-      setError(e.message ?? "Errore durante la finalizzazione del ticket.");
+      setError(e.message ?? "Error when closing the ticket.");
     } finally {
       setLoadingNext(false);
     }
@@ -218,7 +217,7 @@ function OfficerPanel() {
                   <Card.Body className="d-flex justify-content-between align-items-center">
                     <div>
                       <div className="fw-bold">
-                        Ticket: <Badge bg="secondary">{currentTicket.ticket_code}</Badge>
+                        Ticket: <Badge bg="secondary">{currentTicket.id}</Badge>
                       </div>
                       <p>Service: {currentTicket.service.name}</p>
                     </div>
@@ -286,78 +285,3 @@ function OfficerPanel() {
 }
 
 export default OfficerPanel;
-
-export function ServiceCreation() {
-    const [formData, setFormData] = useState<Omit<Service2, 'id'>>({
-        name: '',
-        description: ''
-    });
-
-    const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-        const serviceData = {
-            id: Math.floor(Math.random() * 1000), // Temporary ID generation
-            name: formData.name,
-            description: formData.description
-        };
-        
-        console.log('Sending service data:', serviceData);
-        const response = await api.servicesPost(serviceData);
-        console.log('Response:', response);
-        
-        setFormData({ name: '', description: '' });
-    } catch (err: any) {
-        console.error('Full error:', {
-            message: err.message,
-            status: err.response?.status,
-            data: err.response?.data,
-            config: err.config
-        });
-        }
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    return (
-        <Container className="mt-4">
-            <Card>
-                <Card.Header>Create New Service</Card.Header>
-                <Card.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Service Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Create Service
-                        </Button>
-                    </Form>
-                </Card.Body>
-            </Card>
-        </Container>
-    );
-}
