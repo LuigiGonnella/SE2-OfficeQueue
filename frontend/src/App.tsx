@@ -2,8 +2,8 @@ import { Routes, Route, Navigate } from 'react-router';
 import HomePage from './components/Home';
 import SList from './components/ServiceList';
 import BoardPage from './components/BoardPage';
-
 import ServiceCreation from './components/ServiceManagement';
+import OfficerPanel from './components/OfficerPanel';
 
 function App() {
   return (
@@ -11,7 +11,9 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/services" element={<SList />} />
       <Route path="/board" element={<BoardPage />} />
-      <Route path="/officers" element={<ServiceCreation />} />
+      <Route path="/newservice" element={<ServiceCreation />} />
+      <Route path="/officers" element={<OfficerPanel />} />
+
     </Routes>
   )
 }
