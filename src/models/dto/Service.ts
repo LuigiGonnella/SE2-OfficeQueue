@@ -36,6 +36,12 @@ export interface Service {
      * @memberof Service
      */
     description?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Service
+     */
+    averageServiceTime: number;
 }
 
 /**
@@ -44,6 +50,7 @@ export interface Service {
 export function instanceOfService(value: object): value is Service {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('averageServiceTime' in value) || value['averageServiceTime'] === undefined) return false;
     return true;
 }
 
@@ -60,6 +67,7 @@ export function ServiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'id': json['id'],
         'name': json['name'],
         'description': json['description'] == null ? undefined : json['description'],
+        'averageServiceTime': json['averageServiceTime'],
     };
 }
 
@@ -77,6 +85,7 @@ export function ServiceToJSONTyped(value?: Service | null, ignoreDiscriminator: 
         'id': value['id'],
         'name': value['name'],
         'description': value['description'],
+        'averageServiceTime': value['averageServiceTime'],
     };
 }
 

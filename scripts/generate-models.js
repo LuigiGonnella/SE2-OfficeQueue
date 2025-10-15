@@ -8,7 +8,8 @@ const finalOutputPath = path.resolve(__dirname, "../src/models/dto");
 const tempOutputPath = path.resolve(__dirname, "../temp-dto");
 
 // Generate files in temporary location
-const command = `openapi-generator-cli generate -i ${swaggerPath} -g typescript-fetch -o ${tempOutputPath} --global-property=models --additional-properties=supportsES6=true,modelPackage=""`;
+console.log(swaggerPath+'\n'+finalOutputPath+'\n'+tempOutputPath);
+const command = `openapi-generator-cli generate -i "${swaggerPath}" -g typescript-fetch -o "${tempOutputPath}" --global-property=models --additional-properties=supportsES6=true,modelPackage=""`;
 
 exec(command, (error, stdout, stderr) => {
   if (error) {
@@ -25,6 +26,7 @@ exec(command, (error, stdout, stderr) => {
   const sourceDir = path.join(tempOutputPath, "models");
   if (fs.existsSync(sourceDir)) {
     const files = fs.readdirSync(sourceDir);
+    console.log(`\nProcessing ${files.length} model files...`);
     files.forEach(file => {
       const sourcePath = path.join(sourceDir, file);
       const destPath = path.join(finalOutputPath, file);

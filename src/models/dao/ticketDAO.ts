@@ -1,6 +1,7 @@
-import {Column, Entity, ManyToOne, PrimaryColumn} from "typeorm";
+import {Entity, ManyToOne, OneToOne, PrimaryColumn} from "typeorm";
 import {ServiceDAO} from "@models/dao/serviceDAO";
 import {CustomerDAO} from "@models/dao/customerDAO";
+import {QueueDAO} from "@dao/queueDAO";
 
 @Entity("ticket")
 export class TicketDAO {
@@ -19,4 +20,11 @@ export class TicketDAO {
         { cascade: true }
     )
     service: ServiceDAO;
+
+    @OneToOne(
+        () => QueueDAO,
+        (queue) => queue.ticket,
+        { cascade: true, onDelete: 'CASCADE' }
+    )
+    queue: QueueDAO
 }

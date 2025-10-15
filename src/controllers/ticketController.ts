@@ -14,10 +14,10 @@ export async function getAllTickets(): Promise<TicketDTO[]> {
     return mapTicketDAOToDTO(ticket);
   }
 
-  export async function createTicket(ticketDTO: TicketDTO, customer_id:number, service_id:number): Promise<void> {
+  export async function createTicket(ticket_code: number, customer_id:number, service_id:number): Promise<void> {
     const ticketRepo = new TicketRepository();
     await ticketRepo.createTicket(
-      ticketDTO.id,
+      ticket_code,
       customer_id,
       service_id,
     );
