@@ -21,17 +21,17 @@ const API = (() => {
   return {
     async fetchCounters(): Promise<Counter[]> {
       const res = await fetch(`${BASE_URL}/counters`);
-      if (!res.ok) throw new Error("Impossibile caricare i counter");
+      if (!res.ok) throw new Error("Cannot load counters.");
       return res.json();
     },
     async fetchServicesByCounter(counterId: number): Promise<Service[]> {
       const res = await fetch(`${BASE_URL}/counters/${counterId}/services`);
-      if (!res.ok) throw new Error("Impossibile caricare i servizi del counter");
+      if (!res.ok) throw new Error("Cannot load services for this counter.");
       return res.json();
     },
     async fetchServedTicketsByCounterGrouped(counterId: number): Promise<Record<string, QueueEntry[]>> {
       const res = await fetch(`${BASE_URL}/queues/served/${counterId}`);
-      if (!res.ok) throw new Error("Impossibile caricare i ticket serviti");
+      if (!res.ok) throw new Error("Cannot load served tickets for the counter.");
       const tickets: QueueEntry[] = await res.json();
       const grouped: Record<string, QueueEntry[]> = {};
       tickets.forEach((t) => {
@@ -43,12 +43,12 @@ const API = (() => {
     async callNext(counterId: number): Promise<Ticket | null> {
       const res = await fetch(`${BASE_URL}/queues/next/${counterId}`, { method: "POST" });
       if (res.status === 204) return null;
-      if (!res.ok) throw new Error("Errore durante la chiamata del prossimo cliente");
+      if (!res.ok) throw new Error("Error while calling the next ticket.");
       return res.json();
     },
     async closeTicket(ticketId: number): Promise<void> {
       const res = await fetch(`${BASE_URL}/queues/${ticketId}/close`, { method: "POST" });
-      if (!res.ok) throw new Error("Errore durante la chiusura del ticket");
+      if (!res.ok) throw new Error("Error while closing the ticket.");
     },
   };
 })();
@@ -69,7 +69,7 @@ function OfficerPanel() {
     setLoading(true);
     API.fetchCounters()
       .then((res) => mounted && setCounters(res))
-      .catch((e: any) => setError(e.message ?? "Errore caricando i counter"))
+      .catch((e: any) => setError(e.message ?? "Error loading counters."))
       .finally(() => setLoading(false));
     return () => {
       mounted = false;
@@ -94,7 +94,7 @@ function OfficerPanel() {
         setServices(srv);
         setServedByService(grouped);
       })
-      .catch((e: any) => setError(e.message ?? "Errore caricando i dati del counter"))
+      .catch((e: any) => setError(e.message ?? "Error loading counter data."))
       .finally(() => setLoading(false));
     return () => {
       mounted = false;
@@ -107,10 +107,10 @@ function OfficerPanel() {
     setError(null);
     try {
       const t = await API.callNext(selectedCounterId);
-      if (!t) setError("Nessun cliente in attesa per questo counter.");
+      if (!t) setError("No customer can be served at this counter at the moment.");
       setCurrentTicket(t ?? null);
     } catch (e: any) {
-      setError(e.message ?? "Errore durante la chiamata del prossimo cliente.");
+      setError(e.message ?? "Error while calling the next customer.");
     } finally {
       setLoadingNext(false);
     }
@@ -127,7 +127,7 @@ function OfficerPanel() {
         setServedByService(grouped);
       }
     } catch (e: any) {
-      setError(e.message ?? "Errore durante la finalizzazione del ticket.");
+      setError(e.message ?? "Error when closing the ticket.");
     } finally {
       setLoadingNext(false);
     }
