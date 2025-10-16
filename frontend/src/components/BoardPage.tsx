@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 
 type BoardCall = {
-  ticket: string;
+  ticket: number;
   counter: string | number;
   service: string;
-  at: string;
 };
 
 type QueueRow = {
@@ -17,32 +16,37 @@ export default function BoardPage() {
   const [calls, setCalls] = useState<BoardCall[]>([]);
   const [queues, setQueues] = useState<QueueRow[]>([]);
 
+  const BASE_URL = "http://localhost:8080/api/v1"
+
   useEffect(() => {
     // initial load
-    fetch("/api/v1/board/current").then(r => r.json()).then(setCalls);
-    fetch("/api/v1/board/queues").then(r => r.json()).then(setQueues);
+    setInterval(() => {
+      fetch(BASE_URL+"/board/current").then(r => r.json()).then(setCalls);
+      fetch(BASE_URL+"/board/queues").then(r => r.json()).then(setQueues);
+    }, 500);
 
     // live updates via SSE
-    const evt = new EventSource("/api/v1/board/stream");
-    evt.onmessage = (e) => {
-      const update: BoardCall = JSON.parse(e.data);
-      setCalls(prev => [update, ...prev.slice(0, 9)]);
-    };
-    evt.onerror = () => {
-      // optional: reconnect logic
-    };
-
-    return () => evt.close();
+    // const evt = new EventSource(BASE_URL+"/board/stream");
+    // evt.onmessage = (e) => {
+    //   const update: BoardCall = JSON.parse(e.data);
+    //   setCalls(prev => [update, ...prev.slice(0, 9)]);
+    // };
+    // evt.onerror = () => {
+    //   // optional: reconnect logic
+    // };
+    //
+    // return () => evt.close();
   }, []);
 
   return (
     <div style={{ fontFamily: "system-ui", padding: 24 }}>
-      <h1>Now Serving</h1>
+      {calls.length > 0 &&
+      <h1>Now Serving: {calls[0].ticket} at Counter: {calls[0].counter}</h1>}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         <div>
           <h2>Recent Calls</h2>
           <ul>
-            {calls.map((c, i) => (
+            {calls.slice(1).map((c, i) => (
               <li key={i}>
                 <strong>{c.ticket}</strong> → Counter <strong>{c.counter}</strong> ({c.service})
               </li>
