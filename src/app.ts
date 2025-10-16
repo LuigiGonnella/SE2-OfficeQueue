@@ -10,6 +10,7 @@ import ticketRouter from "@routes/ticketRoutes";
 import serviceRouter from "@routes/serviceRoutes";
 import queueRouter from "@routes/queueRoutes";
 import counterRouter from "@routes/counterRoutes";
+import boardRouter from "@routes/boardRoutes";
 import "reflect-metadata";
 
 export const app = express();
@@ -40,7 +41,8 @@ app.use(CONFIG.ROUTES.V1_CUSTOMERS, customerRouter);
 app.use(CONFIG.ROUTES.V1_SERVICES, serviceRouter);
 app.use(CONFIG.ROUTES.V1_TICKETS, ticketRouter);
 app.use(CONFIG.ROUTES.V1_QUEUES, queueRouter);
-app.use(CONFIG.ROUTES.V1_COUNTERS, counterRouter)
+app.use(CONFIG.ROUTES.V1_COUNTERS, counterRouter);
+app.use(CONFIG.ROUTES.V1_BOARD, boardRouter);
 
 //This must always be the last middleware added
 app.use(errorHandler);

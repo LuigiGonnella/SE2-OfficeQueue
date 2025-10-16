@@ -99,3 +99,8 @@ export async function closeQueueEntry(ticket_id: number): Promise<void> {
     const queueRepo = new QueueRepository();
     await queueRepo.closeQueueEntry(ticket_id);
 }
+
+export async function getLastSixCustomer() : Promise<QueueDAO[]> {
+    const queueRepo = new QueueRepository();
+    return await queueRepo.getLastSixServed();
+}

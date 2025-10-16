@@ -27,6 +27,7 @@ export function createErrorDTO(
 
 export function mapServiceDAOToDTO(ServiceDao: ServiceDAO): ServiceDTO {
   return removeNullAttributes({
+    id: ServiceDao.id,
     name: ServiceDao.name,
     description: ServiceDao.description,
   }) as ServiceDTO;
@@ -36,6 +37,7 @@ export function mapServiceDAOToDTO(ServiceDao: ServiceDAO): ServiceDTO {
 
 export function mapCustomerDAOToDTO(CustomerDao: CustomerDAO): CustomerDTO {
   return removeNullAttributes({
+    id: CustomerDao.customer_id,
     firstName: CustomerDao.firstName,
     lastName: CustomerDao.lastName,
     phoneNumber: CustomerDao.phoneNumber,
@@ -79,7 +81,7 @@ function removeNullAttributes<T extends object>(dto: T): Partial<T> {
 
 export function mapTicketDAOToDTO(ticket: TicketDAO): TicketDTO {
   return removeNullAttributes({
-    ticket_code: ticket.ticket_code,
+    id: ticket.ticket_code,
     customer: ticket.customer ? mapCustomerDAOToDTO(ticket.customer) : undefined,
     service: ticket.service ? mapServiceDAOToDTO(ticket.service) : undefined,
   }) as TicketDTO;

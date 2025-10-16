@@ -1,11 +1,11 @@
-import {Entity, ManyToOne, OneToOne, PrimaryColumn} from "typeorm";
+import {Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {ServiceDAO} from "@models/dao/serviceDAO";
 import {CustomerDAO} from "@models/dao/customerDAO";
 import {QueueDAO} from "@dao/queueDAO";
 
 @Entity("ticket")
 export class TicketDAO {
-    @PrimaryColumn({nullable: false})
+    @PrimaryGeneratedColumn()
     ticket_code: number;
 
     @ManyToOne(

@@ -322,7 +322,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        ticketsPost: async (ticket: Ticket, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        ticketsPost: async (ticket: { customer: number; service: number }, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'ticket' is not null or undefined
             assertParamExists('ticketsPost', 'ticket', ticket)
             const localVarPath = `/tickets`;
@@ -536,7 +536,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async ticketsPost(ticket: Ticket, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Ticket>> {
+        async ticketsPost(ticket: { customer: number; service: number }, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Ticket>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.ticketsPost(ticket, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.ticketsPost']?.[localVarOperationServerIndex]?.url;
@@ -661,7 +661,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        ticketsPost(ticket: Ticket, options?: RawAxiosRequestConfig): AxiosPromise<Ticket> {
+        ticketsPost(ticket: { customer: number; service: number }, options?: RawAxiosRequestConfig): AxiosPromise<Ticket> {
             return localVarFp.ticketsPost(ticket, options).then((request) => request(axios, basePath));
         },
         /**
@@ -783,7 +783,7 @@ export class DefaultApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public ticketsPost(ticket: Ticket, options?: RawAxiosRequestConfig) {
+    public ticketsPost(ticket: { customer: number; service: number }, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).ticketsPost(ticket, options).then((request) => request(this.axios, this.basePath));
     }
 

@@ -1,3 +1,4 @@
+import { TicketDAO } from "@models/dao/ticketDAO";
 import { Ticket as TicketDTO } from "@models/dto/Ticket";
 import { TicketRepository } from "@repositories/ticketRepository";
 import {mapTicketDAOToDTO} from "@services/mapperService";
@@ -14,10 +15,9 @@ export async function getAllTickets(): Promise<TicketDTO[]> {
     return mapTicketDAOToDTO(ticket);
   }
 
-  export async function createTicket(ticket_code: number, customer_id:number, service_id:number): Promise<void> {
+  export async function createTicket(customer_id:number, service_id:number): Promise<TicketDAO> {
     const ticketRepo = new TicketRepository();
-    await ticketRepo.createTicket(
-      ticket_code,
+    return await ticketRepo.createTicket(
       customer_id,
       service_id,
     );

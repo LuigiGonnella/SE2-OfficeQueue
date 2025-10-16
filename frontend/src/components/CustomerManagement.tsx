@@ -1,29 +1,29 @@
-import {Button, Card, Container, Form} from "react-bootstrap";
+import {Col, Row, Button, Card, ListGroup, Container, Form} from "react-bootstrap";
+import { Link, useNavigate } from "react-router";
 import { api } from "../services/apiService.ts";
-import React, { useState } from 'react';
-import type { Service } from "../API/api.ts";
+import React, { useState, useEffect } from 'react';
+import type { Customer } from "../API/api.ts";
 
-function ServiceCreation() {
-    const [formData, setFormData] = useState<Omit<Service, 'id'>>({
-        name: '',
-        description: ''
+function CustomerCreation() {
+    const [formData, setFormData] = useState<Omit<Customer, 'id'>>({
+        firstName: '',
+        lastName: '',
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-        const serviceData = {
+        const customerData = {
             id: Math.floor(Math.random() * 1000), // Temporary ID generation
-            name: formData.name,
-            description: formData.description,
-            averageServiceTime: Math.floor(Math.random() * 1000), // Temporary ID generation
+            firstName: formData.firstName,
+            lastName: formData.lastName,
         };
-        
-        console.log('Sending service data:', serviceData);
-        const response = await api.servicesPost(serviceData);
+
+        console.log('Sending customer data:', customerData);
+        const response = await api.customersPost(customerData);
         console.log('Response:', response);
-        
-        setFormData({ name: '', description: '' });
+
+        setFormData({ firstName: '', lastName: '' });
     } catch (err: any) {
         console.error('Full error:', {
             message: err.message,
@@ -45,32 +45,32 @@ function ServiceCreation() {
     return (
         <Container className="mt-4">
             <Card>
-                <Card.Header>Create New Service</Card.Header>
+                <Card.Header>Create New Customer</Card.Header>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Service Name</Form.Label>
+                            <Form.Label>Customer First Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="name"
-                                value={formData.name}
+                                name="firstName"
+                                value={formData.firstName}
                                 onChange={handleChange}
                                 required
                             />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
+                            <Form.Label>Customer Last Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="description"
-                                value={formData.description}
+                                name="lastName"
+                                value={formData.lastName}
                                 onChange={handleChange}
                             />
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
-                            Create Service
+                            Create Customer
                         </Button>
                     </Form>
                 </Card.Body>
@@ -79,4 +79,4 @@ function ServiceCreation() {
     );
 }
 
-export default ServiceCreation;
+export default CustomerCreation;

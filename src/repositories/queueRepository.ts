@@ -1,6 +1,6 @@
 import {QueueDAO} from "@dao/queueDAO";
 import {AppDataSource} from "@database";
-import {Repository} from "typeorm";
+import {Between, Repository} from "typeorm";
 
 export class QueueRepository {
     private repo: Repository<QueueDAO>;
@@ -43,13 +43,13 @@ export class QueueRepository {
             .getMany();
     }
 
-    getLastFiveServed(): Promise<QueueDAO[]> {
-        return this.repo.createQueryBuilder("queue")
-            .leftJoinAndSelect("queue.ticket", "ticket")
-            .where("queue.served = :served", { served: true })
-            .orderBy("queue.closed_at", "DESC")
-            .limit(5)
-            .getMany();
+    getLastSixServed(): Promise<QueueDAO[]> {
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+
+        return this.repo.find({ relations: ["ticket", "ticket.service", "counter"], where: { served: true, timestamp: Between(startOfDay, endOfDay) }, order: { served_at: "DESC" }, take: 6 });
     }
 
     getServedByCounterToday(id_counter: number): Promise<QueueDAO[]> {

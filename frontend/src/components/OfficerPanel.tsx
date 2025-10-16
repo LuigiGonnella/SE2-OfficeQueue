@@ -13,8 +13,7 @@ import {
   Accordion,
 } from "react-bootstrap";
 import type {Counter, Service, QueueEntry, Ticket} from "../API/types.ts";
-import type { Service as Service2 } from "../API/api.ts";
-import { api } from "../services/apiService.ts";
+
 
 const API = (() => {
   const BASE_URL = "http://localhost:8080/api/v1";
@@ -22,17 +21,17 @@ const API = (() => {
   return {
     async fetchCounters(): Promise<Counter[]> {
       const res = await fetch(`${BASE_URL}/counters`);
-      if (!res.ok) throw new Error("Impossibile caricare i counter");
+      if (!res.ok) throw new Error("Cannot load counters.");
       return res.json();
     },
     async fetchServicesByCounter(counterId: number): Promise<Service[]> {
       const res = await fetch(`${BASE_URL}/counters/${counterId}/services`);
-      if (!res.ok) throw new Error("Impossibile caricare i servizi del counter");
+      if (!res.ok) throw new Error("Cannot load services for this counter.");
       return res.json();
     },
     async fetchServedTicketsByCounterGrouped(counterId: number): Promise<Record<string, QueueEntry[]>> {
       const res = await fetch(`${BASE_URL}/queues/served/${counterId}`);
-      if (!res.ok) throw new Error("Impossibile caricare i ticket serviti");
+      if (!res.ok) throw new Error("Cannot load served tickets for the counter.");
       const tickets: QueueEntry[] = await res.json();
       const grouped: Record<string, QueueEntry[]> = {};
       tickets.forEach((t) => {
@@ -44,12 +43,12 @@ const API = (() => {
     async callNext(counterId: number): Promise<Ticket | null> {
       const res = await fetch(`${BASE_URL}/queues/next/${counterId}`, { method: "POST" });
       if (res.status === 204) return null;
-      if (!res.ok) throw new Error("Errore durante la chiamata del prossimo cliente");
+      if (!res.ok) throw new Error("Error while calling the next ticket.");
       return res.json();
     },
     async closeTicket(ticketId: number): Promise<void> {
       const res = await fetch(`${BASE_URL}/queues/${ticketId}/close`, { method: "POST" });
-      if (!res.ok) throw new Error("Errore durante la chiusura del ticket");
+      if (!res.ok) throw new Error("Error while closing the ticket.");
     },
   };
 })();
@@ -70,7 +69,7 @@ function OfficerPanel() {
     setLoading(true);
     API.fetchCounters()
       .then((res) => mounted && setCounters(res))
-      .catch((e: any) => setError(e.message ?? "Errore caricando i counter"))
+      .catch((e: any) => setError(e.message ?? "Error loading counters."))
       .finally(() => setLoading(false));
     return () => {
       mounted = false;
@@ -95,7 +94,7 @@ function OfficerPanel() {
         setServices(srv);
         setServedByService(grouped);
       })
-      .catch((e: any) => setError(e.message ?? "Errore caricando i dati del counter"))
+      .catch((e: any) => setError(e.message ?? "Error loading counter data."))
       .finally(() => setLoading(false));
     return () => {
       mounted = false;
@@ -108,10 +107,10 @@ function OfficerPanel() {
     setError(null);
     try {
       const t = await API.callNext(selectedCounterId);
-      if (!t) setError("Nessun cliente in attesa per questo counter.");
+      if (!t) setError("No customer can be served at this counter at the moment.");
       setCurrentTicket(t ?? null);
     } catch (e: any) {
-      setError(e.message ?? "Errore durante la chiamata del prossimo cliente.");
+      setError(e.message ?? "Error while calling the next customer.");
     } finally {
       setLoadingNext(false);
     }
@@ -121,14 +120,14 @@ function OfficerPanel() {
     if (!currentTicket) return;
     setLoadingNext(true);
     try {
-      await API.closeTicket(currentTicket.ticket_code);
+      await API.closeTicket(currentTicket.id);
       setCurrentTicket(null);
       if (selectedCounterId != null) {
         const grouped = await API.fetchServedTicketsByCounterGrouped(selectedCounterId);
         setServedByService(grouped);
       }
     } catch (e: any) {
-      setError(e.message ?? "Errore durante la finalizzazione del ticket.");
+      setError(e.message ?? "Error when closing the ticket.");
     } finally {
       setLoadingNext(false);
     }
@@ -148,216 +147,183 @@ function OfficerPanel() {
   console.log(services);
 
   return (
-    <Container fluid className="py-4">
-      <Row className="mb-3">
-        <Col md={8}>
-          <h2>Officer Panel</h2>
-        </Col>
-        <Col md={4}>
-          <Form.Group controlId="counterSelect">
-            <Form.Label>Select counter</Form.Label>
-            <Form.Select
-              value={selectedCounterId != null ? String(selectedCounterId) : ""}
-              onChange={(e) => {
-                const v = e.target.value;
-                setSelectedCounterId(v ? Number(v) : null);
-              }}
-              disabled={loading || loadingNext}
-            >
-              <option value="">-- Select --</option>
-              {counters.map((c) => (
-                <option key={c.counter_code} value={String(c.counter_code)}>
-                  {c.counter_code}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
+      <>
+        <style>
+          {`
+          body {
+            background-color: #f8f9fa;
+          }
+        `}
+        </style>
 
-      {error && (
-        <Row className="mb-3">
-          <Col>
-            <Alert variant="warning" dismissible onClose={() => setError(null)}>
-              {error}
-            </Alert>
-          </Col>
-        </Row>
-      )}
+        <Container fluid className="py-4" style={{ minHeight: '100vh' }}>
+          <Row className="mb-4">
+            <Col>
+              <h1 className="text-center text-dark fw-bold border-bottom border-primary border-3 pb-3 mb-4">
+                Officer Panel
+              </h1>
+            </Col>
+          </Row>
 
-      <Row>
-        <Col md={6} className="mb-4">
-          <Card>
-            <Card.Header className="d-flex justify-content-between align-items-center">
-              <span>Actions</span>
-              {loading && (
-                <span>
-                  <Spinner size="sm" animation="border" /> Loading
-                </span>
-              )}
-            </Card.Header>
-            <Card.Body>
-              <div className="d-flex gap-2 align-items-center">
-                <Button
-                  variant="primary"
-                  onClick={onCallNext}
-                  disabled={selectedCounterId == null || !!currentTicket || loadingNext}
-                >
-                  {loadingNext ? (
-                    <>
-                      <Spinner size="sm" animation="border" className="me-2" /> Loading...
-                    </>
-                  ) : (
-                    "Call next customer"
+          <Row className="mb-3">
+            <Col md={{ span: 6, offset: 3 }}>
+              <Card className="border-dark border-2 shadow-sm">
+                <Card.Body>
+                  <Form.Group controlId="counterSelect">
+                    <Form.Label className="fw-semibold text-dark">Select Counter</Form.Label>
+                    <Form.Select
+                        value={selectedCounterId != null ? String(selectedCounterId) : ""}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          setSelectedCounterId(v ? Number(v) : null);
+                        }}
+                        disabled={loading || loadingNext}
+                        className="border-2"
+                    >
+                      <option value="">-- Select --</option>
+                      {counters.map((c) => (
+                          <option key={c.counter_code} value={String(c.counter_code)}>
+                            Counter {c.counter_code}
+                          </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          {error && (
+              <Row className="mb-3">
+                <Col md={{ span: 8, offset: 2 }}>
+                  <Alert variant="warning" dismissible onClose={() => setError(null)} className="border-2">
+                    <strong>Warning:</strong> {error}
+                  </Alert>
+                </Col>
+              </Row>
+          )}
+
+          <Row>
+            <Col md={6} className="mb-4">
+              <Card className="border-dark border-2 shadow-sm">
+                <Card.Header className="bg-white border-bottom border-dark border-2 d-flex justify-content-between align-items-center">
+                  <h4 className="mb-0 text-dark">Actions</h4>
+                  {loading && (
+                      <span className="text-secondary">
+                    <Spinner size="sm" animation="border" /> Loading...
+                  </span>
                   )}
-                </Button>
-              </div>
+                </Card.Header>
+                <Card.Body>
+                  <div className="d-flex gap-2 align-items-center mb-3">
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        onClick={onCallNext}
+                        disabled={selectedCounterId == null || !!currentTicket || loadingNext}
+                    >
+                      {loadingNext ? (
+                          <>
+                            <Spinner size="sm" animation="border" className="me-2" /> Loading...
+                          </>
+                      ) : (
+                          "Call Next Customer"
+                      )}
+                    </Button>
+                  </div>
 
-              {currentTicket && (
-                <Card className="mt-3">
-                  <Card.Body className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <div className="fw-bold">
-                        Ticket: <Badge bg="secondary">{currentTicket.ticket_code}</Badge>
+                  {currentTicket && (
+                      <Card className="border-primary border-3 shadow-sm">
+                        <Card.Header className="bg-white border-bottom border-primary border-2 text-center">
+                          <h5 className="mb-0 text-dark fw-bold">Current Ticket</h5>
+                        </Card.Header>
+                        <Card.Body className="text-center py-4">
+                          <Badge bg="primary" className="fs-3 px-4 py-3 mb-3">
+                            Ticket #{currentTicket.id}
+                          </Badge>
+                          <h5 className="text-dark mt-3 mb-3">Service: {currentTicket.service.name}</h5>
+                          <Button
+                              variant="success"
+                              size="lg"
+                              onClick={() => finalizeTicket()}
+                              disabled={loadingNext}
+                              className="px-4"
+                          >
+                            Mark as Done
+                          </Button>
+                        </Card.Body>
+                      </Card>
+                  )}
+
+                  {!currentTicket && (
+                      <div className="text-center text-secondary py-4">
+                        No customer currently being served.
                       </div>
-                      <p>Service: {currentTicket.service.name}</p>
-                    </div>
-                    <div className="d-flex gap-2">
-                      <Button variant="outline-success" onClick={() => finalizeTicket()} disabled={loadingNext}>
-                        Done
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              )}
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
 
-              {!currentTicket && <div className="text-muted mt-3">No customers served.</div>}
-            </Card.Body>
-          </Card>
-        </Col>
-
-        <Col md={6} className="mb-4">
-          <Card>
-            <Card.Header>Served customers history</Card.Header>
-            <Card.Body>
-              {selectedCounterId == null && <div className="text-muted">Select a counter to view data.</div>}
-              {selectedCounterId != null && servicesWithServed.length === 0 && !loading && (
-                <div className="text-muted">No service available for this counter.</div>
-              )}
-              {selectedCounterId != null && (
-                <Accordion alwaysOpen>
-                  {servicesWithServed.map((s) => (
-                    <Accordion.Item eventKey={s.name} key={s.name}>
-                      <Accordion.Header>
-                        {s.name}
-                        <Badge bg="secondary" className="ms-2">
-                          {s.served.length}
-                        </Badge>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        {s.served.length === 0 ? (
-                          <div className="text-muted">No customer served for this service.</div>
-                        ) : (
-                          <ListGroup variant="flush">
-                            {s.served.map((t) => (
-                              <ListGroup.Item key={t.id} className="d-flex justify-content-between">
-                                <span>
-                                  <Badge bg="dark" className="me-2">
-                                    {t.number}
-                                  </Badge>
-                                  Served at {t.servedAt ? new Date(t.servedAt).toLocaleString() : "-"}
-                                </span>
-                                <Badge bg="success">SERVED</Badge>
-                              </ListGroup.Item>
-                            ))}
-                          </ListGroup>
-                        )}
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  ))}
-                </Accordion>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+            <Col md={6} className="mb-4">
+              <Card className="border-dark border-2 shadow-sm">
+                <Card.Header className="bg-white border-bottom border-dark border-2">
+                  <h4 className="mb-0 text-dark">Served Customers History</h4>
+                </Card.Header>
+                <Card.Body>
+                  {selectedCounterId == null && (
+                      <div className="text-center text-secondary py-4">
+                        Select a counter to view history.
+                      </div>
+                  )}
+                  {selectedCounterId != null && servicesWithServed.length === 0 && !loading && (
+                      <div className="text-center text-secondary py-4">
+                        No services available for this counter.
+                      </div>
+                  )}
+                  {selectedCounterId != null && servicesWithServed.length > 0 && (
+                      <Accordion alwaysOpen>
+                        {servicesWithServed.map((s) => (
+                            <Accordion.Item eventKey={s.name} key={s.name} className="border mb-2">
+                              <Accordion.Header>
+                                <span className="text-dark fw-semibold">{s.name}</span>
+                                <Badge bg="dark" className="ms-2">
+                                  {s.served.length}
+                                </Badge>
+                              </Accordion.Header>
+                              <Accordion.Body>
+                                {s.served.length === 0 ? (
+                                    <div className="text-secondary text-center py-3">
+                                      No customers served for this service yet.
+                                    </div>
+                                ) : (
+                                    <ListGroup variant="flush">
+                                      {s.served.map((t) => (
+                                          <ListGroup.Item key={t.id} className="d-flex justify-content-between align-items-center border-bottom py-3">
+                                  <span>
+                                    <Badge bg="primary" className="me-2 fs-6 px-3 py-2">
+                                      #{t.number}
+                                    </Badge>
+                                    <span className="text-secondary small">
+                                      Served at {t.servedAt ? new Date(t.servedAt).toLocaleString() : "-"}
+                                    </span>
+                                  </span>
+                                            <Badge bg="success" className="px-3 py-2">SERVED</Badge>
+                                          </ListGroup.Item>
+                                      ))}
+                                    </ListGroup>
+                                )}
+                              </Accordion.Body>
+                            </Accordion.Item>
+                        ))}
+                      </Accordion>
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </>
   );
 }
 
 export default OfficerPanel;
-
-export function ServiceCreation() {
-    const [formData, setFormData] = useState<Omit<Service2, 'id'>>({
-        name: '',
-        description: ''
-    });
-
-    const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-        const serviceData = {
-            id: Math.floor(Math.random() * 1000), // Temporary ID generation
-            name: formData.name,
-            description: formData.description
-        };
-        
-        console.log('Sending service data:', serviceData);
-        const response = await api.servicesPost(serviceData);
-        console.log('Response:', response);
-        
-        setFormData({ name: '', description: '' });
-    } catch (err: any) {
-        console.error('Full error:', {
-            message: err.message,
-            status: err.response?.status,
-            data: err.response?.data,
-            config: err.config
-        });
-        }
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    return (
-        <Container className="mt-4">
-            <Card>
-                <Card.Header>Create New Service</Card.Header>
-                <Card.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Service Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Create Service
-                        </Button>
-                    </Form>
-                </Card.Body>
-            </Card>
-        </Container>
-    );
-}
