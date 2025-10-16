@@ -96,53 +96,39 @@ describe('TicketRepository', () => {
 
     describe('createTicket', () => {
         it('should create ticket successfully with valid data', async () => {
-            const ticket = await ticketRepository.createTicket(100, 1, 1);
+            const ticket = await ticketRepository.createTicket(1, 1);
             
-            expect(ticket.ticket_code).toBe(100);
             expect(ticket.customer.customer_id).toBe(1);
             expect(ticket.service.id).toBe(1);
 
             // Verify queue entry was created
             const queueRepo = TestDataSource.getRepository(QueueDAO);
             const queueEntry = await queueRepo.findOne({ 
-                where: { ticket: { ticket_code: 100 } },
+                where: { ticket: { ticket_code: ticket.ticket_code } },
                 relations: ['ticket']
             });
             expect(queueEntry).toBeTruthy();
-            expect(queueEntry?.ticket.ticket_code).toBe(100);
-        });
-
-        it('should throw BadRequestError when ticket_code is missing', async () => {
-            await expect(ticketRepository.createTicket(null as any, 1, 1))
-                .rejects.toThrow(BadRequestError);
+            expect(queueEntry?.ticket.ticket_code).toBe(ticket.ticket_code);
         });
 
         it('should throw BadRequestError when customer_id is missing', async () => {
-            await expect(ticketRepository.createTicket(100, null as any, 1))
+            await expect(ticketRepository.createTicket(null as any, 100))
                 .rejects.toThrow(BadRequestError);
         });
 
         it('should throw BadRequestError when id_service is missing', async () => {
-            await expect(ticketRepository.createTicket(100, 1, null as any))
+            await expect(ticketRepository.createTicket(1, null as any))
                 .rejects.toThrow(BadRequestError);
         });
 
-        it('should throw ConflictError when ticket_code already exists', async () => {
-            // Create first ticket
-            await ticketRepository.createTicket(100, 1, 1);
-
-            // Try to create another with same code
-            await expect(ticketRepository.createTicket(100, 1, 1))
-                .rejects.toThrow('Ticket with code 100 already exists');
-        });
 
         it('should throw NotFoundError when customer does not exist', async () => {
-            await expect(ticketRepository.createTicket(100, 999, 1))
-                .rejects.toThrow('Customer with id 999 not found');
+            await expect(ticketRepository.createTicket(101, 999))
+                .rejects.toThrow('Customer with id 101 not found');
         });
 
         it('should throw NotFoundError when service does not exist', async () => {
-            await expect(ticketRepository.createTicket(100, 1, 999))
+            await expect(ticketRepository.createTicket(1, 999))
                 .rejects.toThrow('Service with id 999 not found');
         });
     });
