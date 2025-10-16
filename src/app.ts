@@ -8,11 +8,18 @@ import * as OpenApiValidator from "express-openapi-validator";
 import customerRouter from "@routes/customerRoutes";
 import ticketRouter from "@routes/ticketRoutes";
 import serviceRouter from "@routes/serviceRoutes";
+import queueRouter from "@routes/queueRoutes";
+import counterRouter from "@routes/counterRoutes";
+import boardRouter from "@routes/boardRoutes";
+import "reflect-metadata";
 
 export const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 
 app.use(
   CONFIG.ROUTES.V1_SWAGGER,
@@ -22,16 +29,22 @@ app.use(
 
 app.use(
     OpenApiValidator.middleware({
-        apiSpec: './doc/swagger_v1.yaml',
+    // use the same absolute path used by swagger-ui so the validator
+    // can always find the spec regardless of current working directory
+    apiSpec: CONFIG.SWAGGER_V1_FILE_PATH,
         validateApiSpec: true,
         validateRequests: true,
-        validateResponses: true,
     })
 )
 
 app.use(CONFIG.ROUTES.V1_CUSTOMERS, customerRouter);
 app.use(CONFIG.ROUTES.V1_SERVICES, serviceRouter);
 app.use(CONFIG.ROUTES.V1_TICKETS, ticketRouter);
+app.use(CONFIG.ROUTES.V1_QUEUES, queueRouter);
+app.use(CONFIG.ROUTES.V1_COUNTERS, counterRouter);
+app.use(CONFIG.ROUTES.V1_BOARD, boardRouter);
 
 //This must always be the last middleware added
 app.use(errorHandler);
+
+

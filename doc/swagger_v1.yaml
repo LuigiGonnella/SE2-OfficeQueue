@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: API for the project
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:8080/api/v1
     description: Local server
 paths:
   /customers:
@@ -19,7 +19,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Customer'
-                  
+    post:
+      summary: Create a new customer
+      description: Create a new customer with the provided details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
   /services:
     get:
       summary: Get all services
@@ -32,13 +48,48 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Service'
-                  
-  /services/{service_name}:
+
+    post:
+      summary: Create a new service
+      description: Create a new service with the provided details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+      responses:
+        '201':
+          description: Service created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+
+  /services/id/{id}:
+    get:
+      summary: Get a specific service by its Id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+          description: The Id of the service to retrieve
+      responses:
+        '200':
+          description: A single service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+
+  /services/name/{name}:
     get:
       summary: Get a specific service by its name
       parameters:
         - in: path
-          name: service_name
+          name: name
           required: true
           schema:
             type: string
@@ -50,6 +101,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Service'
+
+    delete:
+      summary: Delete a service
+      description: Delete a service by its name
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The name of the service to delete
+      responses:
+        '204':
+          description: Service deleted successfully
+
+
 
   /tickets:
     get:
@@ -70,7 +137,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ticket'
+              type: object
+              properties:
+                serviceId:
+                  type: integer
+                  example: 10
+                customerId:
+                  type: integer
+                  example: 1
       responses:
         '201':
           description: Ticket created successfully
@@ -96,6 +170,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ticket'
+        #'400':
+         # description: Invalid input data
+          #content:
+           # application/json:
+            #  schema:
+             #   $ref: "#/components/schemas/ErrorDTO"
 
   /tickets/service/{service_name}:
     get:
@@ -116,6 +196,218 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Ticket'
+        #'400':
+         # description: Invalid input data
+          #content:
+           # application/json:
+            #  schema:
+             #   $ref: "#/components/schemas/ErrorDTO"
+  /counters:
+    get:
+      summary: Get all counters
+      responses:
+        '200':
+          description: A list of counters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Counter'
+    post:
+      summary: Create a new counter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                serviceIds:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        '201':
+          description: Counter created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counter'
+  /counters/{id}/services:
+    get:
+      summary: Get services for a specific counter
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the counter
+      responses:
+        '200':
+          description: A list of services for the specified counter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+  /queues:
+    get:
+      summary: Get all queues
+      responses:
+        '200':
+          description: A list of queues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Queue'
+    post:
+      summary: Create a new queue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Queue'
+      responses:
+        '201':
+          description: Queue created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Queue'
+  /queues/served/{counter_id}:
+    get:
+      summary: Get daily served queues for a specific counter
+      parameters:
+        - in: path
+          name: counter_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the counter
+      responses:
+        '200':
+          description: A list of served queues for the specified counter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Queue'
+  /queues/next/{counter_id}:
+    post:
+      summary: Get the next ticket in queue for a specific counter
+      parameters:
+        - in: path
+          name: counter_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the counter
+      responses:
+        '201':
+          description: The next queue for the specified counter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Queue'
+  /queues/{ticket_id}/close:
+    post:
+      summary: Close a specific queue by ticket ID
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the ticket whose queue is to be closed
+      responses:
+        '200':
+          description: Queue closed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Queue'
+  /queues/recent_calls:
+    get:
+      summary: Get the last 6 customers
+      responses:
+        '200':
+          description: List of the last 6 customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    number:
+                      type: integer
+                    service:
+                      type: string
+                    createAt:
+                      type: string
+                    counter:
+                      type: integer
+  /board/current:
+    get:
+      summary: Get current calls for the board
+      responses:
+        '200':
+          description: List of current calls
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    number:
+                      type: integer
+                    service:
+                      type: string
+                    counter:
+                      type: integer
+  /board/queues:
+    get:
+      summary: Get all queues for the board
+      responses:
+        '200':
+          description: List of all queues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    number:
+                      type: integer
+                    service:
+                      type: string
+                    createAt:
+                      type: string
+                    counter:
+                      type: integer
+  /board/stream:
+    get:
+      summary: Stream current calls for the board
+      responses:
+        '200':
+          description: Stream of current calls
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
 
 components:
   schemas:
@@ -125,14 +417,16 @@ components:
         id:
           type: integer
           example: 1
-        name:
+        firstName:
           type: string
-          example: "Mario Rossi"
-        email:
+          example: "Mario"
+        lastName:
           type: string
-          format: email
-          example: "mario.rossi@example.com"
-      required: [id, name]
+          example: "Rossi"
+        phoneNumber:
+          type: string
+          example: "391234567890"
+      required: [id, firstName, lastName]
 
     Service:
       type: object
@@ -146,14 +440,17 @@ components:
         description:
           type: string
           example: "Passport issuance service"
-      required: [id, name]
+        averageServiceTime:
+          type: integer
+          example: 30
+      required: [id, name, averageServiceTime]
 
     Ticket:
       type: object
       properties:
         id:
-          type: string
-          example: "TCK-0001"
+          type: number
+          example: 1001
         service:
           $ref: '#/components/schemas/Service'
         customer:
@@ -162,6 +459,71 @@ components:
           type: string
           format: date-time
       required: [id, service, customer]
+
+    Queue:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        timestamp:
+          type: string
+          format: date-time
+        ticket:
+          $ref: '#/components/schemas/Ticket'
+        counter:
+          $ref: '#/components/schemas/Counter'
+        servedAt:
+          type: string
+          format: date-time
+          example: "2023-10-01T10:30:00Z"
+        served:
+          type: boolean
+          example: false
+        closedd_at:
+          type: string
+          format: date-time
+          example: "2023-10-01T11:00:00Z"
+        
+      required: [id, ticket]
+
+    Counter:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        queues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Queue'
+      required: [id, services, queues]
+    
+    Officer:
+      type: object
+      properties:
+        officer_code:
+          type: integer
+          example: 1
+        counter:
+          $ref: '#/components/schemas/Counter'
+      required: [officer_code, counter]
+
+    ErrorDTO:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: number
+        name:
+          type: string
+        message:
+          type: string
       
 
 

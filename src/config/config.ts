@@ -1,14 +1,32 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
 
+const DB_PATH = path.resolve(__dirname, '../../data/database.sqlite');
 const APP_V1_BASE_URL = "/api/v1";
 const URL_AUTH = "/auth";
 const URL_CUSTOMERS = "/customers";
 const URL_SERVICES = "/services";
 const URL_TICKETS = "/tickets";
+const URL_QUEUES = "/queues";
+const URL_COUNTERS = "/counters";
+const URL_BOARD = "/board";
 
 export const CONFIG = {
 	APP_PORT: process.env.PORT || 8080,
+
+	DB_TYPE: process.env.DB_TYPE || "sqlite",
+	DB_HOST: process.env.DB_HOST || undefined,
+	DB_PORT: process.env.DB_PORT
+		? Number.parseInt(process.env.DB_PORT)
+		: undefined,
+	DB_USERNAME: process.env.DB_USERNAME || undefined,
+	DB_PASSWORD: process.env.DB_PASSWORD || undefined,
+	DB_NAME: process.env.DB_NAME || DB_PATH,
+
+	DB_ENTITIES: [
+        path.join(__dirname, "../models/dao/*.ts"),
+        path.join(__dirname, "../models/dao/*.js")  // per il codice compilato
+    ],
 
 	SWAGGER_V1_FILE_PATH: path.resolve(__dirname, "../../doc/swagger_v1.yaml"),
 	ROUTES: {
@@ -16,7 +34,10 @@ export const CONFIG = {
 		V1_AUTH: APP_V1_BASE_URL + URL_AUTH,
 		V1_CUSTOMERS: APP_V1_BASE_URL + URL_CUSTOMERS,
 		V1_SERVICES: APP_V1_BASE_URL + URL_SERVICES,
-		V1_TICKETS: APP_V1_BASE_URL + URL_TICKETS
+		V1_TICKETS: APP_V1_BASE_URL + URL_TICKETS,
+		V1_QUEUES: APP_V1_BASE_URL + URL_QUEUES,
+		V1_COUNTERS: APP_V1_BASE_URL + URL_COUNTERS,
+		V1_BOARD: APP_V1_BASE_URL + URL_BOARD,
 	},
 	LOG_LEVEL: process.env.LOG_LEVEL || "info",
 	LOG_PATH: process.env.LOG_PATH || "logs",
