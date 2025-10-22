@@ -45,10 +45,12 @@ sections:
 
 ### Detailed statistics
 
-| Story  | # Tasks | Points | Hours est. | Hours actual |
-|--------|---------|--------|------------|--------------|
-| _Uncategorized_   |         |       |            |              |
-| n      |         |        |            |              |  
+|      Story      | # Tasks | Points | Hours est. | Hours actual |
+| :-------------: | :-----: | :----: | :--------: | :----------: |
+| _Uncategorized_ |    6    |   -    | 23 h 45 m  |  33 h 15 m   |
+|  _Get Ticket_   |    5    |   -    |    10 h    |   5 h 45 m   |
+| _Next Customer_ |    6    |   -    | 15 h 30 m  |     14 h     |
+| _Call Customer_ |    4    |   -    | 11 h 30 m  |   6 h 30 m   |
 
 > story `Uncategorized` is for technical tasks, leave out story points (not applicable in this case)
 
