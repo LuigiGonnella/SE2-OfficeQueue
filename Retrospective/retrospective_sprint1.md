@@ -55,9 +55,9 @@ sections:
 - Hours per task average, standard deviation (estimate and actual)
 
 |            | Mean | StDev |
-|------------|------|-------|
-| Estimation |      |       | 
-| Actual     |      |       |
+| ---------- | :--: | :---: |
+| Estimation | 174  |  153  |
+| Actual     | 170  |  232  |
 
 - Total estimation error ratio: sum of total hours spent / sum of total hours effort - 1
 
