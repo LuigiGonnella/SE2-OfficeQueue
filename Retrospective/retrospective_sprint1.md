@@ -22,24 +22,21 @@ sections:
 
 - Nr of hours planned vs. spent (as a team)
 
-
+        60 hours 45 minutes vs 59 hours 30 minutes
 
 **Remember**a story is done ONLY if it fits the Definition of Done:
  
 - Unit Tests passing
 
-    92 tests
 
 - Code review completed
 
-    0 completed
 
 - Code present on VCS
   
 
 - End-to-End tests performed
 
-    0 tests
 
 > Please refine your DoD if required (you cannot remove items!) 
 
@@ -48,9 +45,9 @@ sections:
 |      Story      | # Tasks | Points | Hours est. | Hours actual |
 | :-------------: | :-----: | :----: | :--------: | :----------: |
 | _Uncategorized_ |    6    |   -    | 23 h 45 m  |  33 h 15 m   |
-|  _Get Ticket_   |    5    |   -    |    10 h    |   5 h 45 m   |
-| _Next Customer_ |    6    |   -    | 15 h 30 m  |     14 h     |
-| _Call Customer_ |    4    |   -    | 11 h 30 m  |   6 h 30 m   |
+|  _Get Ticket_   |    5    |   2    |    10 h    |   5 h 45 m   |
+| _Next Customer_ |    6    |   1    | 15 h 30 m  |     14 h     |
+| _Call Customer_ |    4    |   3    | 11 h 30 m  |   6 h 30 m   |
 
 > story `Uncategorized` is for technical tasks, leave out story points (not applicable in this case)
 
@@ -130,9 +127,22 @@ Tests:       92 passed, 92 total
 
 - What did go wrong in the sprint?
 
+        We underestimated time in planning and spent more time on uncategorized tasks like the sprint planning and we waived test time.
+
 - What caused your errors in estimation (if any)?
 
+        We divided the tasks and stories in internal groups and while performing the tasks simultaneously we didn't catch up with the other groups on time.
+
+        It was our first time working together and with Agile.
+
 - What lessons did you learn (both positive and negative) in this sprint?
+
+        We understood how to work together under pressure. (Positive)
+
+        We agreed and made unanimous decisions. (Positive)
+
+        We learned that planning and communication are key elements in a group project. (Negative)
+
 
 - Which improvement goals set in the previous retrospective were you able to achieve? 
   
@@ -140,6 +150,10 @@ Tests:       92 passed, 92 total
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
-  > Propose one or two
+        Tasks -> We will make sure everyone participates in the setup tasks (defining entities, backend configuration, ...).
+
+        Planning -> We will try to spend planning time more efficiently.
 
 - One thing you are proud of as a Team!!
+
+        We are proud of doing a great presentation and provide a fully working software.
