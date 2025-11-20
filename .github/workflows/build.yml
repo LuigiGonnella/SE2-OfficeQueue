@@ -18,6 +18,10 @@ jobs:
       - name: Test and coverage
         run: npm run test:coverage
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: .
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+          SONAR_HOST_URL: "https://sonarcloud.io"
+          SONAR_ORGANIZATION: "luigigonnella"
