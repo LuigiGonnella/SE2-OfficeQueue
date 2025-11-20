@@ -6,5 +6,4 @@ data
 database.sqlite
 openapitools.json
 logs
-coverage
 package-lock.json
