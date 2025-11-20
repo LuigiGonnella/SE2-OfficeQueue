@@ -10,7 +10,7 @@ jobs:
     name: SonarQube
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@665365af895528af085d646d27ec35a90378c4ab
         with:
           fetch-depth: 0 
       - name: Install dependencies
