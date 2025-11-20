@@ -250,9 +250,9 @@ describe('QueueRepository', () => {
         });
     });
 
-    describe('getLastFiveServed', () => {
+    describe('getLastSixServed', () => {
         it('should return empty array when no served entries exist', async () => {
-            const lastServed = await queueRepository.getLastFiveServed();
+            const lastServed = await queueRepository.getLastSixServed();
             expect(lastServed).toEqual([]);
         });
 
@@ -302,13 +302,13 @@ describe('QueueRepository', () => {
                 }
             ]);
 
-            const lastServed = await queueRepository.getLastFiveServed();
+            const lastServed = await queueRepository.getLastSixServed();
             expect(lastServed).toHaveLength(2);
             expect(lastServed[0].ticket.ticket_code).toBe(403); // latest closed_at first
             expect(lastServed[1].ticket.ticket_code).toBe(401);
         });
 
-        it('should limit results to maximum 5 entries', async () => {
+        it('should limit results to maximum 6 entries', async () => {
             // Create multiple tickets
             const ticketRepo = TestDataSource.getRepository(TicketDAO);
             const tickets = [];
@@ -337,8 +337,8 @@ describe('QueueRepository', () => {
             
             await queueRepo.save(entries);
 
-            const lastServed = await queueRepository.getLastFiveServed();
-            expect(lastServed).toHaveLength(5);
+            const lastServed = await queueRepository.getLastSixServed();
+            expect(lastServed).toHaveLength(6);
             // Should get the 5 most recent ticket codes (507, 506, 505, 504, 503)
             expect(lastServed[0].ticket.ticket_code).toBe(507);
             expect(lastServed[4].ticket.ticket_code).toBe(503);

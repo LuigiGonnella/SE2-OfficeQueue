@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1763637732503" clover="3.2.0">
-  <project timestamp="1763637732503" name="All files">
-    <metrics statements="73" coveredstatements="73" conditionals="15" coveredconditionals="15" methods="29" coveredmethods="29" elements="117" coveredelements="117" complexity="0" loc="73" ncloc="73" packages="2" files="4" classes="4"/>
+<coverage generated="1763644450944" clover="3.2.0">
+  <project timestamp="1763644450944" name="All files">
+    <metrics statements="145" coveredstatements="139" conditionals="27" coveredconditionals="23" methods="52" coveredmethods="50" elements="224" coveredelements="212" complexity="0" loc="145" ncloc="145" packages="2" files="6" classes="6"/>
     <package name="src">
       <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
-      <file name="utils.ts" path="D:\ellyb\POLITO\05\SE_2\SE2-OfficeQueue\src\utils.ts">
+      <file name="utils.ts" path="C:\Users\Utente\OneDrive - Politecnico di Torino\Universita\Magistrale\Secondo Anno\Software_Engineering_2\OfficeQueue\SE2-OfficeQueue\src\utils.ts">
         <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="4" count="3" type="stmt"/>
-        <line num="9" count="30" type="stmt"/>
-        <line num="10" count="30" type="cond" truecount="2" falsecount="0"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="13" count="22" type="stmt"/>
-        <line num="16" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="9" count="42" type="stmt"/>
+        <line num="10" count="42" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="13" type="stmt"/>
+        <line num="13" count="29" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
         <line num="21" count="28" type="cond" truecount="2" falsecount="0"/>
         <line num="22" count="5" type="stmt"/>
       </file>
     </package>
     <package name="src.repositories">
-      <metrics statements="63" coveredstatements="63" conditionals="11" coveredconditionals="11" methods="27" coveredmethods="27"/>
-      <file name="counterRepository.ts" path="D:\ellyb\POLITO\05\SE_2\SE2-OfficeQueue\src\repositories\counterRepository.ts">
+      <metrics statements="135" coveredstatements="129" conditionals="23" coveredconditionals="19" methods="50" coveredmethods="48"/>
+      <file name="counterRepository.ts" path="C:\Users\Utente\OneDrive - Politecnico di Torino\Universita\Magistrale\Secondo Anno\Software_Engineering_2\OfficeQueue\SE2-OfficeQueue\src\repositories\counterRepository.ts">
         <metrics statements="26" coveredstatements="26" conditionals="0" coveredconditionals="0" methods="12" coveredmethods="12"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -49,7 +49,7 @@
         <line num="61" count="3" type="stmt"/>
         <line num="64" count="3" type="stmt"/>
       </file>
-      <file name="customerRepository.ts" path="D:\ellyb\POLITO\05\SE_2\SE2-OfficeQueue\src\repositories\customerRepository.ts">
+      <file name="customerRepository.ts" path="C:\Users\Utente\OneDrive - Politecnico di Torino\Universita\Magistrale\Secondo Anno\Software_Engineering_2\OfficeQueue\SE2-OfficeQueue\src\repositories\customerRepository.ts">
         <metrics statements="14" coveredstatements="14" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -66,7 +66,39 @@
         <line num="32" count="3" type="stmt"/>
         <line num="36" count="12" type="stmt"/>
       </file>
-      <file name="serviceRepository.ts" path="D:\ellyb\POLITO\05\SE_2\SE2-OfficeQueue\src\repositories\serviceRepository.ts">
+      <file name="queueRepository.ts" path="C:\Users\Utente\OneDrive - Politecnico di Torino\Universita\Magistrale\Secondo Anno\Software_Engineering_2\OfficeQueue\SE2-OfficeQueue\src\repositories\queueRepository.ts">
+        <metrics statements="29" coveredstatements="29" conditionals="0" coveredconditionals="0" methods="9" coveredmethods="9"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="47" count="3" type="stmt"/>
+        <line num="48" count="3" type="stmt"/>
+        <line num="49" count="3" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+        <line num="52" count="3" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="72" count="2" type="stmt"/>
+        <line num="82" count="2" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+      </file>
+      <file name="serviceRepository.ts" path="C:\Users\Utente\OneDrive - Politecnico di Torino\Universita\Magistrale\Secondo Anno\Software_Engineering_2\OfficeQueue\SE2-OfficeQueue\src\repositories\serviceRepository.ts">
         <metrics statements="23" coveredstatements="23" conditionals="5" coveredconditionals="5" methods="11" coveredmethods="11"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -91,6 +123,52 @@
         <line num="57" count="11" type="stmt"/>
         <line num="62" count="3" type="stmt"/>
         <line num="63" count="2" type="stmt"/>
+      </file>
+      <file name="ticketRepository.ts" path="C:\Users\Utente\OneDrive - Politecnico di Torino\Universita\Magistrale\Secondo Anno\Software_Engineering_2\OfficeQueue\SE2-OfficeQueue\src\repositories\ticketRepository.ts">
+        <metrics statements="43" coveredstatements="37" conditionals="12" coveredconditionals="8" methods="14" coveredmethods="12"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="42" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="46" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="51" count="3" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="70" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="80" count="2" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="102" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="103" count="1" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
       </file>
     </package>
   </project>
